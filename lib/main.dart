@@ -52,6 +52,23 @@ class _MainAppState extends State<MainApp> {
 
   bool subVideoSame=false;
 
+  // 测试代码
+  // void runCommand() async {
+  //   String command = 'ffmpeg';
+  //   ProcessResult result = await Process.run(command, ['-version'], runInShell: true);
+
+  //   // 处理结果
+  //   if (result.exitCode == 0) {
+  //     print('FFmpeg 命令执行成功:');
+  //     List<String> lines = result.stdout.split('\n');
+  //     String firstLine = lines.isNotEmpty ? lines.first : "";
+  //     outputInput.text=firstLine;
+  //   } else {
+  //     print('FFmpeg 命令执行失败:');
+  //     print(result.stderr);
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +106,7 @@ class _MainAppState extends State<MainApp> {
   Future<void> anayliseSub(Directory directory) async{
     var files=[];
     await for (var entity in directory.list()) {
-      if (entity is File) {
+      if (entity is File && !basename(entity.path).startsWith(".")) {
         if(extension(entity.path)=='.srt' || extension(entity.path)=='.ass'){
           files.add(entity.path);
         }
@@ -103,7 +120,7 @@ class _MainAppState extends State<MainApp> {
   Future<void> anayliseVideo(Directory directory) async {
     var files=[];
     await for (var entity in directory.list()) {
-      if (entity is File) {
+      if (entity is File && !basename(entity.path).startsWith(".")) {
         if(extension(entity.path)=='.mp4' || extension(entity.path)=='.mkv'){
           files.add(entity.path);
         }
@@ -260,7 +277,7 @@ class _MainAppState extends State<MainApp> {
                         SizedBox(width: 10,),
                         FilledButton(
                           onPressed: outputInput.text!="" && subInput.text!="" && videoInput.text!="" ? (){
-
+                            // TODO 执行任务
                           } : null,
                           child: Text("开始执行"),
                         )
