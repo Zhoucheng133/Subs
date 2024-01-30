@@ -3,4 +3,7 @@ import 'package:get/get.dart';
 class Controller extends GetxController{
   var videoDir=TextEditingController().obs;
   var subDir=TextEditingController().obs;
+
+  void setVideoDir(data)=>videoDir.value.text=data;
+  void setsubDir(data)=>subDir.value.text=data;
 }

@@ -2,6 +2,7 @@
 
 // import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 import 'package:subs/paras/paras.dart';
@@ -62,13 +63,6 @@ class _MainAppState extends State<MainApp> {
                           Expanded(
                             child: Row(
                               children: [
-                                Button(
-                                  child: Text("选择视频目录"), 
-                                  onPressed: (){
-                                    print(c.videoDir.value.text);
-                                  }
-                                ),
-                                SizedBox(width: 10,),
                                 Expanded(
                                   child: Obx(() => 
                                     TextBox(
@@ -76,21 +70,29 @@ class _MainAppState extends State<MainApp> {
                                       controller: c.videoDir.value,
                                     ),
                                   )
-                                )
+                                ),
+                                SizedBox(width: 10,),
+                                Button(
+                                  child: Text("选择视频目录"), 
+                                  onPressed: () async {
+                                    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                                    if(selectedDirectory!=null){
+                                      c.setVideoDir(selectedDirectory);
+                                    }
+                                  }
+                                ),
                               ],
                             )
                           ),
-                          SizedBox(width: 10,),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      Row(
+                        children: [
                           Expanded(
                             child: Row(
                               children: [
-                                Button(
-                                  child: Text("选择字幕目录"), 
-                                  onPressed: (){
-                                    print(c.videoDir.value.text);
-                                  }
-                                ),
-                                SizedBox(width: 10,),
+                                
                                 Expanded(
                                   child: Obx(() => 
                                     TextBox(
@@ -98,7 +100,17 @@ class _MainAppState extends State<MainApp> {
                                       controller: c.subDir.value,
                                     ),
                                   )
-                                )
+                                ),
+                                SizedBox(width: 10,),
+                                Button(
+                                  child: Text("选择字幕目录"), 
+                                  onPressed: () async {
+                                    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                                    if(selectedDirectory!=null){
+                                      c.setsubDir(selectedDirectory);
+                                    }
+                                  }
+                                ),
                               ],
                             ),
                           )
