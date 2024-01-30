@@ -11,7 +11,7 @@ void main() {
   runApp(MainApp());
   
   doWhenWindowReady(() {
-    const initialSize = Size(800, 600);
+    const initialSize = Size(800, 700);
     appWindow.minSize = initialSize;
     appWindow.size = initialSize;
     appWindow.maxSize=initialSize;
@@ -33,6 +33,7 @@ class _MainAppState extends State<MainApp> {
 
   var videoInput=TextEditingController();
   var subInput=TextEditingController();
+  var outputInput=TextEditingController();
 
   bool subVideoSame=false;
 
@@ -157,12 +158,49 @@ class _MainAppState extends State<MainApp> {
                           Expanded(child: Container()),
                           FilledButton(
                             onPressed: (subInput.text=="" || videoInput.text=="") ? null : (){
-
+                              // TODO 分析目录
                             },
                             child: Text("分析目录"), 
                           )
                         ],
                       ),
+                      SizedBox(height: 20,),
+                      Container(
+                        width: double.infinity,
+                        height: 400,
+                        color: Color.fromARGB(255, 220, 220, 220),
+                      ),
+                      SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextBox(
+                              enabled: false,
+                              controller: outputInput,
+                            )
+                          ),
+                          SizedBox(width: 10,),
+                          Button(
+                            child: Text("选择导出目录"), 
+                            onPressed: () async {
+                              String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                              if(selectedDirectory!=null){
+                                c.updateOutputDir(selectedDirectory);
+                                setState(() {
+                                  outputInput.text=selectedDirectory;
+                                });
+                              }
+                            }
+                          ),
+                          SizedBox(width: 10,),
+                          FilledButton(
+                            onPressed: outputInput.text!="" && subInput.text!="" && videoInput.text!="" ? (){
+
+                            } : null,
+                            child: Text("开始执行"),
+                          )
+                        ],
+                      )
                     ],
                   )
                 )
