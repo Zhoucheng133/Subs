@@ -2,6 +2,7 @@
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import 'package:subs/paras/paras.dart';
 
 class subIndex extends StatefulWidget {
@@ -14,7 +15,6 @@ class subIndex extends StatefulWidget {
 class _subIndexState extends State<subIndex> {
 
   final ScrollController scroll=ScrollController();
-  final ScrollController Hscroll=ScrollController();
 
   final Controller c=Get.put(Controller());
 
@@ -29,7 +29,43 @@ class _subIndexState extends State<subIndex> {
                 controller: scroll,
                 itemCount: c.videoFiles.length,
                 itemBuilder: (BuildContext context, int index){
-                  return Text(c.videoFiles[index]);
+                  return Column(
+                    children: [
+                      Container(
+                        // color: Colors.red,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          // color: Colors.grey[20]
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(FluentIcons.m_s_n_videos),
+                            SizedBox(width: 10,),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    basename(c.videoFiles[index]),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  Text(
+                                    "${extension(c.videoFiles[index]).substring(1)} 视频",
+                                    style: TextStyle(
+                                      color: Colors.grey[80]
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 5,)
+                    ],
+                  );
                 },
               )
             )

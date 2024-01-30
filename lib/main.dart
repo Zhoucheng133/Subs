@@ -57,13 +57,13 @@ class _MainAppState extends State<MainApp> {
     var files=[];
     await for (var entity in directory.list()) {
       if (entity is File) {
-        // print('File found: ${entity.path}');
         if(extension(entity.path)=='.mp4' || extension(entity.path)=='.mkv'){
-          files.add(basename(entity.path));
+          files.add(entity.path);
         }
         // print(basename(entity.path));
       }
     }
+    files.sort();
     c.updateVideoFiles(files);
   }
 
@@ -188,7 +188,7 @@ class _MainAppState extends State<MainApp> {
                       Container(
                         width: double.infinity,
                         height: 430,
-                        color: Color.fromARGB(255, 220, 220, 220),
+                        // color: Color.fromARGB(255, 240, 240, 240),
                         child: subIndex(),
                       ),
                       SizedBox(height: 10,),
