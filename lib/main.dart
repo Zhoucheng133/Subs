@@ -72,6 +72,7 @@ class _MainAppState extends State<MainApp> {
                                 Expanded(
                                   child: Obx(() => 
                                     TextBox(
+                                      enabled: false,
                                       controller: c.videoDir.value,
                                     ),
                                   )
@@ -81,7 +82,25 @@ class _MainAppState extends State<MainApp> {
                           ),
                           SizedBox(width: 10,),
                           Expanded(
-                            child: Container()
+                            child: Row(
+                              children: [
+                                Button(
+                                  child: Text("选择字幕目录"), 
+                                  onPressed: (){
+                                    print(c.videoDir.value.text);
+                                  }
+                                ),
+                                SizedBox(width: 10,),
+                                Expanded(
+                                  child: Obx(() => 
+                                    TextBox(
+                                      enabled: false,
+                                      controller: c.subDir.value,
+                                    ),
+                                  )
+                                )
+                              ],
+                            ),
                           )
                         ],
                       )
