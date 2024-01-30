@@ -36,16 +36,17 @@ class _MainAppState extends State<MainApp> {
 
   bool subVideoSame=false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   ever(c.videoDir, (callback){
-  //     if(subVideoSame==true){
-  //       c.updateSubDir(c.videoDir.value);
-  //     }
-  //   });
-  // }
+    ever(c.videoDir, (callback){
+      if(subVideoSame==true){
+        c.updateSubDir(c.videoDir.value);
+        subInput.text=c.videoDir.value;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
