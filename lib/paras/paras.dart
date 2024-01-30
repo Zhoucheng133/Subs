@@ -4,6 +4,6 @@ class Controller extends GetxController{
   var videoDir=TextEditingController().obs;
   var subDir=TextEditingController().obs;
 
-  void setVideoDir(data)=>videoDir.value.text=data;
-  void setsubDir(data)=>subDir.value.text=data;
+  void updateVideoDir(data)=>videoDir.value.text=data;
+  void updateSubDir(data)=>subDir.value.text=data;
 }

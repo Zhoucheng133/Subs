@@ -31,6 +31,8 @@ class _MainAppState extends State<MainApp> {
 
   final Controller c=Get.put(Controller());
 
+  bool subVideoSame=false;
+
   @override
   Widget build(BuildContext context) {
     return FluentApp(
@@ -77,7 +79,7 @@ class _MainAppState extends State<MainApp> {
                                   onPressed: () async {
                                     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
                                     if(selectedDirectory!=null){
-                                      c.setVideoDir(selectedDirectory);
+                                      c.updateVideoDir(selectedDirectory);
                                     }
                                   }
                                 ),
@@ -92,7 +94,6 @@ class _MainAppState extends State<MainApp> {
                           Expanded(
                             child: Row(
                               children: [
-                                
                                 Expanded(
                                   child: Obx(() => 
                                     TextBox(
@@ -103,19 +104,42 @@ class _MainAppState extends State<MainApp> {
                                 ),
                                 SizedBox(width: 10,),
                                 Button(
-                                  child: Text("选择字幕目录"), 
-                                  onPressed: () async {
+                                  onPressed: subVideoSame==true ? null : () async {
                                     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
                                     if(selectedDirectory!=null){
-                                      c.setsubDir(selectedDirectory);
+                                      c.updateSubDir(selectedDirectory);
                                     }
-                                  }
+                                  },
+                                  child: Text("选择字幕目录")
                                 ),
                               ],
                             ),
                           )
                         ],
-                      )
+                      ),
+                      SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          Text("字幕和视频目录相同"),
+                          SizedBox(width: 10,),
+                          ToggleSwitch(
+                            checked: subVideoSame, 
+                            onChanged: (val){
+                              setState(() {
+                                subVideoSame=val;
+                              });
+                              c.updateSubDir(c.videoDir.value.text);
+                            }
+                          ),
+                          Expanded(child: Container()),
+                          FilledButton(
+                            child: Text("分析目录"), 
+                            onPressed: (c.subDir.value.text=="" || c.videoDir.value.text=="") ? null : (){
+
+                            }
+                          )
+                        ],
+                      ),
                     ],
                   )
                 )
