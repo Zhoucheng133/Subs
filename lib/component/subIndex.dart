@@ -14,7 +14,8 @@ class subIndex extends StatefulWidget {
 
 class _subIndexState extends State<subIndex> {
 
-  final ScrollController scroll=ScrollController();
+  final ScrollController videoScroll=ScrollController();
+  final ScrollController subScroll=ScrollController();
 
   final Controller c=Get.put(Controller());
 
@@ -25,7 +26,7 @@ class _subIndexState extends State<subIndex> {
         Expanded(
           child: Obx(() => 
             ListView.builder(
-              controller: scroll,
+              controller: videoScroll,
               itemCount: c.videoFiles.length,
               itemBuilder: (BuildContext context, int index){
                 return Column(
@@ -71,8 +72,52 @@ class _subIndexState extends State<subIndex> {
         ),
         SizedBox(width: 10,),
         Expanded(
-          child: Container(),
-        )
+          child: Obx(() => 
+            ListView.builder(
+              controller: subScroll,
+              itemCount: c.subFiles.length,
+              itemBuilder: (BuildContext context, int index){
+                return Column(
+                  children: [
+                    Container(
+                      // color: Colors.red,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        // color: Colors.grey[20]
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(FluentIcons.font_size),
+                          SizedBox(width: 10,),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  basename(c.subFiles[index]),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                Text(
+                                  "${extension(c.subFiles[index]).substring(1)} 字幕",
+                                  style: TextStyle(
+                                    color: Colors.grey[80]
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5,)
+                  ],
+                );
+              },
+            )
+          )
+        ),
       ],
     );
   }
