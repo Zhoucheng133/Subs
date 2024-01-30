@@ -20,62 +20,60 @@ class _subIndexState extends State<subIndex> {
 
   @override
   Widget build(BuildContext context) {
-    return FluentApp(
-      home: Row(
-        children: [
-          Expanded(
-            child: Obx(() => 
-              ListView.builder(
-                controller: scroll,
-                itemCount: c.videoFiles.length,
-                itemBuilder: (BuildContext context, int index){
-                  return Column(
-                    children: [
-                      Container(
-                        // color: Colors.red,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          // color: Colors.grey[20]
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(FluentIcons.m_s_n_videos),
-                            SizedBox(width: 10,),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    basename(c.videoFiles[index]),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  Text(
-                                    "${extension(c.videoFiles[index]).substring(1)} 视频",
-                                    style: TextStyle(
-                                      color: Colors.grey[80]
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+    return Row(
+      children: [
+        Expanded(
+          child: Obx(() => 
+            ListView.builder(
+              controller: scroll,
+              itemCount: c.videoFiles.length,
+              itemBuilder: (BuildContext context, int index){
+                return Column(
+                  children: [
+                    Container(
+                      // color: Colors.red,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        // color: Colors.grey[20]
                       ),
-                      SizedBox(height: 5,)
-                    ],
-                  );
-                },
-              )
+                      child: Row(
+                        children: [
+                          Icon(FluentIcons.m_s_n_videos),
+                          SizedBox(width: 10,),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  basename(c.videoFiles[index]),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                Text(
+                                  "${extension(c.videoFiles[index]).substring(1)} 视频",
+                                  style: TextStyle(
+                                    color: Colors.grey[80]
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5,)
+                  ],
+                );
+              },
             )
-          ),
-          SizedBox(width: 10,),
-          Expanded(
-            child: Container(),
           )
-        ],
-      )
+        ),
+        SizedBox(width: 10,),
+        Expanded(
+          child: Container(),
+        )
+      ],
     );
   }
 }

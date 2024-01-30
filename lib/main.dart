@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 // import 'package:flutter/material.dart';
 import 'dart:io';
@@ -12,7 +12,7 @@ import 'package:subs/component/subIndex.dart';
 import 'package:subs/paras/paras.dart';
 
 void main() {
-  runApp(MainApp());
+  runApp(MyApp());
   
   doWhenWindowReady(() {
     const initialSize = Size(800, 700);
@@ -22,6 +22,17 @@ void main() {
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FluentApp(
+      home: MainApp(),
+    );
+  }
 }
 
 class MainApp extends StatefulWidget {
@@ -53,6 +64,42 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  Future<void> anaylise(Directory videoDir, Directory subDir, BuildContext context) async {
+    await anayliseVideo(videoDir);
+    await anayliseSub(subDir);
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => ContentDialog(
+        title: Text("分析完成"),
+        content: Text(
+          "查找到有${c.videoFiles.length}个视频，${c.subFiles.length}个字幕"
+        ),
+        actions: [
+          FilledButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text("好的"),
+          )
+        ],
+      )
+    );
+  }
+  
+  Future<void> anayliseSub(Directory directory) async{
+    var files=[];
+    await for (var entity in directory.list()) {
+      if (entity is File) {
+        if(extension(entity.path)=='.srt' || extension(entity.path)=='.ass'){
+          files.add(entity.path);
+        }
+        // print(basename(entity.path));
+      }
+    }
+    files.sort();
+    c.updateSubFiles(files);
+  }
+
   Future<void> anayliseVideo(Directory directory) async {
     var files=[];
     await for (var entity in directory.list()) {
@@ -69,167 +116,163 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FluentApp(
-      home: Container(
-        color: Colors.white,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              child: SizedBox(
-                height: 30,
-                width: MediaQuery.of(context).size.width,
-                child: WindowTitleBarBox(
-                  child: MoveWindow(),
-                ),
-              )
-            ),
-            Positioned(
-              top: 30,
-              child: Container(
-                // color: Colors.red,
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextBox(
-                                    enabled: false,
-                                    controller: videoInput,
-                                  ),
+    return Container(
+      color: Colors.white,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            child: SizedBox(
+              height: 30,
+              width: MediaQuery.of(context).size.width,
+              child: WindowTitleBarBox(
+                child: MoveWindow(),
+              ),
+            )
+          ),
+          Positioned(
+            top: 30,
+            child: Container(
+              // color: Colors.red,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextBox(
+                                  enabled: false,
+                                  controller: videoInput,
                                 ),
-                                SizedBox(width: 10,),
-                                Button(
-                                  child: Text("选择视频目录"), 
-                                  onPressed: () async {
-                                    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-                                    if(selectedDirectory!=null){
-                                      c.updateVideoDir(selectedDirectory);
-                                      setState(() {
-                                        videoInput.text=selectedDirectory;
-                                      });
-                                    }
+                              ),
+                              SizedBox(width: 10,),
+                              Button(
+                                child: Text("选择视频目录"), 
+                                onPressed: () async {
+                                  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                                  if(selectedDirectory!=null){
+                                    c.updateVideoDir(selectedDirectory);
+                                    setState(() {
+                                      videoInput.text=selectedDirectory;
+                                    });
                                   }
-                                ),
-                              ],
-                            )
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10,),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextBox(
-                                    enabled: false,
-                                    controller: subInput,
-                                  ),
-                                ),
-                                SizedBox(width: 10,),
-                                Button(
-                                  onPressed: subVideoSame==true ? null : () async {
-                                    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-                                    if(selectedDirectory!=null){
-                                      c.updateSubDir(selectedDirectory);
-                                      setState(() {
-                                        subInput.text=selectedDirectory;
-                                      });
-                                    }
-                                  },
-                                  child: Text("选择字幕目录")
-                                ),
-                              ],
-                            ),
+                                }
+                              ),
+                            ],
                           )
-                        ],
-                      ),
-                      SizedBox(height: 10,),
-                      Row(
-                        children: [
-                          Text("字幕和视频目录相同"),
-                          SizedBox(width: 10,),
-                          ToggleSwitch(
-                            checked: subVideoSame, 
-                            onChanged: (val){
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextBox(
+                                  enabled: false,
+                                  controller: subInput,
+                                ),
+                              ),
+                              SizedBox(width: 10,),
+                              Button(
+                                onPressed: subVideoSame==true ? null : () async {
+                                  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                                  if(selectedDirectory!=null){
+                                    c.updateSubDir(selectedDirectory);
+                                    setState(() {
+                                      subInput.text=selectedDirectory;
+                                    });
+                                  }
+                                },
+                                child: Text("选择字幕目录")
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        Text("字幕和视频目录相同"),
+                        SizedBox(width: 10,),
+                        ToggleSwitch(
+                          checked: subVideoSame, 
+                          onChanged: (val){
+                            setState(() {
+                              subVideoSame=val;
+                            });
+                            if(val==true){
+                              c.updateSubDir(videoInput.text);
+                              // subInput=videoInput.text;
                               setState(() {
-                                subVideoSame=val;
+                                subInput.text=videoInput.text;
                               });
-                              if(val==true){
-                                c.updateSubDir(videoInput.text);
-                                // subInput=videoInput.text;
-                                setState(() {
-                                  subInput.text=videoInput.text;
-                                });
-                              }
                             }
-                          ),
-                          Expanded(child: Container()),
-                          FilledButton(
-                            onPressed: (subInput.text=="" || videoInput.text=="") ? null : (){
-                              // TODO 分析目录
-
-                              anayliseVideo(Directory(videoInput.text));
-                            },
-                            child: Text("分析目录"), 
+                          }
+                        ),
+                        Expanded(child: Container()),
+                        FilledButton(
+                          onPressed: (subInput.text=="" || videoInput.text=="") ? null : (){
+                            anaylise(Directory(videoInput.text), Directory(subInput.text), context);
+                          },
+                          child: Text("分析目录"), 
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20,),
+                    Container(
+                      width: double.infinity,
+                      height: 430,
+                      // color: Color.fromARGB(255, 240, 240, 240),
+                      child: subIndex(),
+                    ),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextBox(
+                            enabled: false,
+                            controller: outputInput,
                           )
-                        ],
-                      ),
-                      SizedBox(height: 20,),
-                      Container(
-                        width: double.infinity,
-                        height: 430,
-                        // color: Color.fromARGB(255, 240, 240, 240),
-                        child: subIndex(),
-                      ),
-                      SizedBox(height: 10,),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextBox(
-                              enabled: false,
-                              controller: outputInput,
-                            )
-                          ),
-                          SizedBox(width: 10,),
-                          Button(
-                            child: Text("选择导出目录"), 
-                            onPressed: () async {
-                              String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-                              if(selectedDirectory!=null){
-                                c.updateOutputDir(selectedDirectory);
-                                setState(() {
-                                  outputInput.text=selectedDirectory;
-                                });
-                              }
+                        ),
+                        SizedBox(width: 10,),
+                        Button(
+                          child: Text("选择导出目录"), 
+                          onPressed: () async {
+                            String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                            if(selectedDirectory!=null){
+                              c.updateOutputDir(selectedDirectory);
+                              setState(() {
+                                outputInput.text=selectedDirectory;
+                              });
                             }
-                          ),
-                          SizedBox(width: 10,),
-                          FilledButton(
-                            onPressed: outputInput.text!="" && subInput.text!="" && videoInput.text!="" ? (){
+                          }
+                        ),
+                        SizedBox(width: 10,),
+                        FilledButton(
+                          onPressed: outputInput.text!="" && subInput.text!="" && videoInput.text!="" ? (){
 
-                            } : null,
-                            child: Text("开始执行"),
-                          )
-                        ],
-                      )
-                    ],
-                  )
+                          } : null,
+                          child: Text("开始执行"),
+                        )
+                      ],
+                    )
+                  ],
                 )
               )
             )
-          ],
-        ),
-      )
+          )
+        ],
+      ),
     );
   }
 }
