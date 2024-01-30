@@ -1,9 +1,8 @@
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 class Controller extends GetxController{
-  var videoDir=TextEditingController().obs;
-  var subDir=TextEditingController().obs;
+  var videoDir="".obs;
+  var subDir="".obs;
 
-  void updateVideoDir(data)=>videoDir.value.text=data;
-  void updateSubDir(data)=>subDir.value.text=data;
+  void updateVideoDir(data)=>videoDir.value=data;
+  void updateSubDir(data)=>subDir.value=data;
 }

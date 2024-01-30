@@ -31,7 +31,21 @@ class _MainAppState extends State<MainApp> {
 
   final Controller c=Get.put(Controller());
 
+  var videoInput=TextEditingController();
+  var subInput=TextEditingController();
+
   bool subVideoSame=false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   ever(c.videoDir, (callback){
+  //     if(subVideoSame==true){
+  //       c.updateSubDir(c.videoDir.value);
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +80,10 @@ class _MainAppState extends State<MainApp> {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: Obx(() => 
-                                    TextBox(
-                                      enabled: false,
-                                      controller: c.videoDir.value,
-                                    ),
-                                  )
+                                  child: TextBox(
+                                    enabled: false,
+                                    controller: videoInput,
+                                  ),
                                 ),
                                 SizedBox(width: 10,),
                                 Button(
@@ -80,6 +92,9 @@ class _MainAppState extends State<MainApp> {
                                     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
                                     if(selectedDirectory!=null){
                                       c.updateVideoDir(selectedDirectory);
+                                      setState(() {
+                                        videoInput.text=selectedDirectory;
+                                      });
                                     }
                                   }
                                 ),
@@ -95,12 +110,10 @@ class _MainAppState extends State<MainApp> {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: Obx(() => 
-                                    TextBox(
-                                      enabled: false,
-                                      controller: c.subDir.value,
-                                    ),
-                                  )
+                                  child: TextBox(
+                                    enabled: false,
+                                    controller: subInput,
+                                  ),
                                 ),
                                 SizedBox(width: 10,),
                                 Button(
@@ -108,6 +121,9 @@ class _MainAppState extends State<MainApp> {
                                     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
                                     if(selectedDirectory!=null){
                                       c.updateSubDir(selectedDirectory);
+                                      setState(() {
+                                        subInput.text=selectedDirectory;
+                                      });
                                     }
                                   },
                                   child: Text("选择字幕目录")
@@ -128,15 +144,21 @@ class _MainAppState extends State<MainApp> {
                               setState(() {
                                 subVideoSame=val;
                               });
-                              c.updateSubDir(c.videoDir.value.text);
+                              if(val==true){
+                                c.updateSubDir(videoInput.text);
+                                // subInput=videoInput.text;
+                                setState(() {
+                                  subInput.text=videoInput.text;
+                                });
+                              }
                             }
                           ),
                           Expanded(child: Container()),
                           FilledButton(
-                            child: Text("分析目录"), 
-                            onPressed: (c.subDir.value.text=="" || c.videoDir.value.text=="") ? null : (){
+                            onPressed: (subInput.text=="" || videoInput.text=="") ? null : (){
 
-                            }
+                            },
+                            child: Text("分析目录"), 
                           )
                         ],
                       ),
