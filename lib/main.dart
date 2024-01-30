@@ -1,10 +1,14 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 // import 'package:flutter/material.dart';
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
+import 'package:subs/component/subIndex.dart';
 import 'package:subs/paras/paras.dart';
 
 void main() {
@@ -47,6 +51,20 @@ class _MainAppState extends State<MainApp> {
         subInput.text=c.videoDir.value;
       }
     });
+  }
+
+  Future<void> anayliseVideo(Directory directory) async {
+    var files=[];
+    await for (var entity in directory.list()) {
+      if (entity is File) {
+        // print('File found: ${entity.path}');
+        if(extension(entity.path)=='.mp4' || extension(entity.path)=='.mkv'){
+          files.add(basename(entity.path));
+        }
+        // print(basename(entity.path));
+      }
+    }
+    c.updateVideoFiles(files);
   }
 
   @override
@@ -159,6 +177,8 @@ class _MainAppState extends State<MainApp> {
                           FilledButton(
                             onPressed: (subInput.text=="" || videoInput.text=="") ? null : (){
                               // TODO 分析目录
+
+                              anayliseVideo(Directory(videoInput.text));
                             },
                             child: Text("分析目录"), 
                           )
@@ -167,8 +187,9 @@ class _MainAppState extends State<MainApp> {
                       SizedBox(height: 20,),
                       Container(
                         width: double.infinity,
-                        height: 400,
+                        height: 430,
                         color: Color.fromARGB(255, 220, 220, 220),
+                        child: subIndex(),
                       ),
                       SizedBox(height: 10,),
                       Row(
