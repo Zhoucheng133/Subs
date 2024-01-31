@@ -131,6 +131,64 @@ class _MainAppState extends State<MainApp> {
     c.updateVideoFiles(files);
   }
 
+  void runService(BuildContext context){
+    if(c.videoFiles.isEmpty){
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) => ContentDialog(
+          title: Text("无法继续"),
+          content: Text(
+            "所选目录没有找到视频文件，确保你已经点击过\"分析目录\"按钮"
+          ),
+          actions: [
+            FilledButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text("好的"),
+            )
+          ],
+        )
+      );
+    }else if(c.subFiles.isEmpty){
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) => ContentDialog(
+          title: Text("无法继续"),
+          content: Text(
+            "所选目录没有找到字幕文件"
+          ),
+          actions: [
+            FilledButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text("好的"),
+            )
+          ],
+        )
+      );
+    }else if(c.videoFiles.length!=c.subFiles.length){
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) => ContentDialog(
+          title: Text("无法继续"),
+          content: Text(
+            "视频文件数量和字幕文件数量不一致"
+          ),
+          actions: [
+            FilledButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text("好的"),
+            )
+          ],
+        )
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -277,7 +335,7 @@ class _MainAppState extends State<MainApp> {
                         SizedBox(width: 10,),
                         FilledButton(
                           onPressed: outputInput.text!="" && subInput.text!="" && videoInput.text!="" ? (){
-                            // TODO 执行任务
+                            runService(context);
                           } : null,
                           child: Text("开始执行"),
                         )
