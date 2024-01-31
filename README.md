@@ -1,3 +1,5 @@
-# subs
+# Subs
 
-A new Flutter project.
+批量添加外挂字幕的工具
+
+👷施工中
