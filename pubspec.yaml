@@ -1,5 +1,5 @@
 name: subs
-description: A new Flutter project.
+description: Subtitle generator
 publish_to: 'none'
 version: 0.1.0
 
@@ -23,3 +23,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+flutter_launcher_icons:
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon.png"
