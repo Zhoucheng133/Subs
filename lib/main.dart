@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:process_run/process_run.dart';
 import 'package:subs/component/subIndex.dart';
 import 'package:subs/paras/paras.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
+      debugShowCheckedModeBanner: false,
       home: MainApp(),
     );
   }
@@ -208,6 +210,8 @@ class _MainAppState extends State<MainApp> {
       c.updateFinishedCount(0);
       c.updateStopProcess(false);
 
+      var shell=Shell();
+
       showDialog(
         context: context, 
         builder: (BuildContext context) => ContentDialog(
@@ -221,46 +225,43 @@ class _MainAppState extends State<MainApp> {
           content: Text("共有${c.videoFiles.length}个任务，已经完成了${c.finishedCount}"),
           actions: [
             FilledButton(
-              onPressed: () async {
+              onPressed: () {
                 c.updateStopProcess(true);
-                await Future(() async {
-                  Process.killPid(c.processId.value);
-                });
+                shell.kill();
+                Navigator.pop(context);
               },
               child: Text("取消"),
             )
           ],
         )
       );
+
       // 运行在这里
       for(var i=0; i<c.videoFiles.length; i++){
-        String videoPath=normalize(c.videoFiles[i]);
-        String subPath=normalize(c.subFiles[i]);
-        String savePath='${normalize(c.outputDir.value)}/${basename(c.videoFiles[i]).replaceAll("mkv", "mp4")}';
+        String videoPath=normalize(c.videoFiles[i].replaceAll(" ", "\\ "));
+        String subPath=normalize(c.subFiles[i].replaceAll(" ", "\\ "));
+        String savePath='${normalize(c.outputDir.value)}/${basename(c.videoFiles[i]).replaceAll("mkv", "mp4").replaceAll(" ", "\\ ")}';
 
         if(c.stopProcess.value==true){
           break;
         }
 
-        Process process = await Process.start("ffmpeg", [
-          "-i",
-          videoPath,
-          subPath.endsWith("ass") ? "-vf" : "-vf",
-          subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}",
-          savePath
-        ], runInShell: true);
+        // Process process = await Process.start("ffmpeg", [
+        //   "-i",
+        //   videoPath,
+        //   subPath.endsWith("ass") ? "-vf" : "-vf",
+        //   subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}",
+        //   savePath
+        // ]);
 
-        c.updateProcessId(process.pid);
+        var command="/usr/local/bin/ffmpeg -i ${videoPath} -vf ${subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}"} ${savePath}";
 
-        int exitCode = await process.exitCode;
+        try {
+          await shell.run(command);
+          // print("stdout: ${result.outText}");
+        } on ShellException catch (_){}
 
-        if (exitCode == 0) {
-          print('命令执行成功:');
-          c.updateFinishedCount(c.finishedCount+1);
-        } else {
-          print('命令执行失败:');
-          break;
-        }
+        c.updateFinishedCount(c.finishedCount+1);
       }
       Navigator.pop(context);
     }
