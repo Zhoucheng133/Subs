@@ -136,7 +136,7 @@ class _MainAppState extends State<MainApp> {
       showDialog(
         context: context, 
         builder: (BuildContext context) => ContentDialog(
-          title: Text("无法继续"),
+          title: Text("无法继续!"),
           content: Text(
             "所选目录没有找到视频文件，确保你已经点击过\"分析目录\"按钮"
           ),
@@ -154,7 +154,7 @@ class _MainAppState extends State<MainApp> {
       showDialog(
         context: context, 
         builder: (BuildContext context) => ContentDialog(
-          title: Text("无法继续"),
+          title: Text("无法继续!"),
           content: Text(
             "所选目录没有找到字幕文件"
           ),
@@ -174,7 +174,7 @@ class _MainAppState extends State<MainApp> {
         builder: (BuildContext context) => ContentDialog(
           title: Text("无法继续"),
           content: Text(
-            "视频文件数量和字幕文件数量不一致"
+            "视频文件数量和字幕文件数量不一致!"
           ),
           actions: [
             FilledButton(
@@ -187,7 +187,23 @@ class _MainAppState extends State<MainApp> {
         )
       );
     }else if(c.outputDir.value==c.videoDir.value){
-
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) => ContentDialog(
+          title: Text("无法继续"),
+          content: Text(
+            "导出目录不能和视频目录相同!"
+          ),
+          actions: [
+            FilledButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text("好的"),
+            )
+          ],
+        )
+      );
     }else{
       c.updateFinishedCount(0);
       c.updateStopProcess(false);
