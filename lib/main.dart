@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, unnecessary_brace_in_string_interps
 
 // import 'package:flutter/material.dart';
 import 'dart:io';
@@ -131,7 +131,7 @@ class _MainAppState extends State<MainApp> {
     c.updateVideoFiles(files);
   }
 
-  void runService(BuildContext context){
+  Future<void> runService(BuildContext context) async {
     if(c.videoFiles.isEmpty){
       showDialog(
         context: context, 
@@ -186,6 +186,35 @@ class _MainAppState extends State<MainApp> {
           ],
         )
       );
+    }else if(c.outputDir.value==c.videoDir.value){
+
+    }else{
+      for(var i=0; i<c.videoFiles.length; i++){
+        String videoPath=normalize(c.videoFiles[i]);
+        String subPath=normalize(c.subFiles[i]);
+        String savePath='${normalize(c.outputDir.value)}/${basename(c.videoFiles[i]).replaceAll("mkv", "mp4")}';
+        print(videoPath);
+        print(subPath);
+        print(savePath);
+        print("_____________");
+        
+        ProcessResult result = await Process.run("ffmpeg", [
+          "-i",
+          videoPath,
+          subPath.endsWith("ass") ? "-vf" : "-vf",
+          subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}",
+          savePath
+        ], runInShell: true);
+
+
+        if (result.exitCode == 0) {
+          print('命令执行成功:');
+          print(result.stdout);
+        } else {
+          print('命令执行失败:');
+          print(result.stderr);
+        }
+      }
     }
   }
 
