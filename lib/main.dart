@@ -189,16 +189,44 @@ class _MainAppState extends State<MainApp> {
     }else if(c.outputDir.value==c.videoDir.value){
 
     }else{
+      c.updateFinishedCount(0);
+      c.updateStopProcess(false);
+
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) => ContentDialog(
+          title: Row(
+            children: [
+              ProgressRing(),
+              SizedBox(width: 10,),
+              Text("执行中..."),
+            ],
+          ),
+          content: Text("共有${c.videoFiles.length}个任务，已经完成了${c.finishedCount}"),
+          actions: [
+            FilledButton(
+              onPressed: () async {
+                c.updateStopProcess(true);
+                await Future(() async {
+                  Process.killPid(c.processId.value);
+                });
+              },
+              child: Text("取消"),
+            )
+          ],
+        )
+      );
+      // 运行在这里
       for(var i=0; i<c.videoFiles.length; i++){
         String videoPath=normalize(c.videoFiles[i]);
         String subPath=normalize(c.subFiles[i]);
         String savePath='${normalize(c.outputDir.value)}/${basename(c.videoFiles[i]).replaceAll("mkv", "mp4")}';
-        print(videoPath);
-        print(subPath);
-        print(savePath);
-        print("_____________");
-        
-        ProcessResult result = await Process.run("ffmpeg", [
+
+        if(c.stopProcess.value==true){
+          break;
+        }
+
+        Process process = await Process.start("ffmpeg", [
           "-i",
           videoPath,
           subPath.endsWith("ass") ? "-vf" : "-vf",
@@ -206,15 +234,19 @@ class _MainAppState extends State<MainApp> {
           savePath
         ], runInShell: true);
 
+        c.updateProcessId(process.pid);
 
-        if (result.exitCode == 0) {
+        int exitCode = await process.exitCode;
+
+        if (exitCode == 0) {
           print('命令执行成功:');
-          print(result.stdout);
+          c.updateFinishedCount(c.finishedCount+1);
         } else {
           print('命令执行失败:');
-          print(result.stderr);
+          break;
         }
       }
+      Navigator.pop(context);
     }
   }
 
