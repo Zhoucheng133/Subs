@@ -20,7 +20,7 @@ class Controller extends GetxController{
   void updateFinishedCount(data) => finishedCount.value=data;
   void updateProcessId(data){
     processId.value=data;
-    print("更新id");
+    // print("更新id");
   }
   void updateStopProcess(data) => stopProcess.value=data;
 }
