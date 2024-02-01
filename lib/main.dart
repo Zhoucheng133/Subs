@@ -222,13 +222,12 @@ class _MainAppState extends State<MainApp> {
               Text("执行中..."),
             ],
           ),
-          content: Text("共有${c.videoFiles.length}个任务，已经完成了${c.finishedCount}"),
+          content: Obx(() => Text("共有${c.videoFiles.length}个任务，已经完成了${c.finishedCount}个")),
           actions: [
             FilledButton(
               onPressed: () {
                 c.updateStopProcess(true);
                 shell.kill();
-                Navigator.pop(context);
               },
               child: Text("取消"),
             )
@@ -242,26 +241,24 @@ class _MainAppState extends State<MainApp> {
         String subPath=normalize(c.subFiles[i].replaceAll(" ", "\\ "));
         String savePath='${normalize(c.outputDir.value)}/${basename(c.videoFiles[i]).replaceAll("mkv", "mp4").replaceAll(" ", "\\ ")}';
 
-        if(c.stopProcess.value==true){
+        // print("取消执行本次循环: ${c.stopProcess.value}");
+
+        if(c.stopProcess.value){
           break;
         }
 
-        // Process process = await Process.start("ffmpeg", [
-        //   "-i",
-        //   videoPath,
-        //   subPath.endsWith("ass") ? "-vf" : "-vf",
-        //   subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}",
-        //   savePath
-        // ]);
-
         var command="/usr/local/bin/ffmpeg -i ${videoPath} -vf ${subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}"} ${savePath}";
-
+        // print("------|${command}|-----");
         try {
           await shell.run(command);
           // print("stdout: ${result.outText}");
-        } on ShellException catch (_){}
+        } on ShellException catch (_){
+          // print("执行出现错误");
+          c.updateStopProcess(true);
+        }
 
-        c.updateFinishedCount(c.finishedCount+1);
+        // print("完成数量${c.finishedCount.value+1}");
+        c.updateFinishedCount(c.finishedCount.value+1);
       }
       Navigator.pop(context);
     }
