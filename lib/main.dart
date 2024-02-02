@@ -48,6 +48,7 @@ class _MainAppState extends State<MainApp> {
 
   final Controller c=Get.put(Controller());
 
+  var ffmpegInput=TextEditingController();
   var videoInput=TextEditingController();
   var subInput=TextEditingController();
   var outputInput=TextEditingController();
@@ -297,6 +298,35 @@ class _MainAppState extends State<MainApp> {
                             children: [
                               Expanded(
                                 child: TextBox(
+                                  controller: ffmpegInput,
+                                ),
+                              ),
+                              SizedBox(width: 10,),
+                              Button(
+                                child: Text("选择FFmpeg路径"), 
+                                onPressed: () async {
+                                  FilePickerResult? ffmpegPath = await FilePicker.platform.pickFiles();
+                                  if(ffmpegPath!=null){
+                                    c.updateFFmpegPath(ffmpegPath.files.single.path!);
+                                    setState(() {
+                                      ffmpegInput.text=ffmpegPath.files.single.path!;
+                                    });
+                                  }
+                                }
+                              ),
+                            ],
+                          )
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextBox(
                                   enabled: false,
                                   controller: videoInput,
                                 ),
@@ -381,8 +411,8 @@ class _MainAppState extends State<MainApp> {
                     SizedBox(height: 20,),
                     Container(
                       width: double.infinity,
-                      height: 430,
-                      // color: Color.fromARGB(255, 240, 240, 240),
+                      height: 400,
+                      color: Color.fromARGB(255, 240, 240, 240),
                       child: subIndex(),
                     ),
                     SizedBox(height: 10,),
