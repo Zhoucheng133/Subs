@@ -9,6 +9,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:process_run/process_run.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/component/subIndex.dart';
 import 'package:subs/paras/paras.dart';
 
@@ -72,9 +73,26 @@ class _MainAppState extends State<MainApp> {
   //   }
   // }
 
+  Future<void> getDefaultFFmpeg() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? path = prefs.getString('ffmpegPath');
+    if(path!=null){
+      setState(() {
+        c.updateFFmpegPath(path);
+        ffmpegInput.text=path;
+      });
+    }
+  }
+
+  Future<void> setDefaultFFmpeg(path) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('ffmpegPath', path);
+  }
+
   @override
   void initState() {
     super.initState();
+    getDefaultFFmpeg();
 
     ever(c.videoDir, (callback){
       if(subVideoSame==true){
@@ -135,6 +153,8 @@ class _MainAppState extends State<MainApp> {
   }
 
   Future<void> runService(BuildContext context) async {
+    c.updateFFmpegPath(ffmpegInput.text);
+    setDefaultFFmpeg(ffmpegInput.text);
     if(c.videoFiles.isEmpty){
       showDialog(
         context: context, 
@@ -311,6 +331,7 @@ class _MainAppState extends State<MainApp> {
                                     setState(() {
                                       ffmpegInput.text=ffmpegPath.files.single.path!;
                                     });
+                                    setDefaultFFmpeg(ffmpegPath.files.single.path);
                                   }
                                 }
                               ),
