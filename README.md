@@ -4,4 +4,4 @@
 
 批量添加外挂字幕的工具
 
-只适用于在`/usr/local/bin/`目录下安装`ffmpeg`的macOS系统
+仅在只在macOS系统下使用
