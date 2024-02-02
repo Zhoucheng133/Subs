@@ -248,7 +248,7 @@ class _MainAppState extends State<MainApp> {
           break;
         }
 
-        var command="/usr/local/bin/ffmpeg -i ${videoPath} -vf ${subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}"} ${savePath}";
+        var command="${ffmpegInput.text} -i ${videoPath} -vf ${subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}"} ${savePath}";
         // print("------|${command}|-----");
         try {
           await shell.run(command);
