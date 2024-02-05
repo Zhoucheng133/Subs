@@ -17,11 +17,11 @@ void main() {
   runApp(MyApp());
   
   doWhenWindowReady(() {
-    const initialSize = Size(800, 700);
-    appWindow.minSize = initialSize;
-    appWindow.size = initialSize;
-    appWindow.maxSize=initialSize;
+    appWindow.minSize = Size(800, 700);
+    appWindow.size = Size(800, 700);
+    appWindow.maxSize=Size(800, 700);
     appWindow.alignment = Alignment.center;
+    appWindow.title = "Subs";
     appWindow.show();
   });
 }
