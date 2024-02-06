@@ -3,7 +3,6 @@
 // import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
@@ -13,17 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/component/subIndex.dart';
 import 'package:subs/paras/paras.dart';
 
-void main() {
+Future<void> main() async {
   runApp(MyApp());
-  
-  doWhenWindowReady(() {
-    appWindow.minSize = Size(800, 700);
-    appWindow.size = Size(800, 700);
-    appWindow.maxSize=Size(800, 700);
-    appWindow.alignment = Alignment.center;
-    appWindow.title = "Subs";
-    appWindow.show();
-  });
 }
 
 class MyApp extends StatelessWidget {
@@ -297,9 +287,7 @@ class _MainAppState extends State<MainApp> {
             child: SizedBox(
               height: 30,
               width: MediaQuery.of(context).size.width,
-              child: WindowTitleBarBox(
-                child: MoveWindow(),
-              ),
+              child: Container(),
             )
           ),
           Positioned(
