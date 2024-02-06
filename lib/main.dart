@@ -3,6 +3,7 @@
 // import 'package:flutter/material.dart';
 import 'dart:io';
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,14 @@ import 'package:subs/paras/paras.dart';
 
 Future<void> main() async {
   runApp(MyApp());
+
+  doWhenWindowReady(() {
+    const initialSize = Size(800, 700);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -45,23 +54,6 @@ class _MainAppState extends State<MainApp> {
   var outputInput=TextEditingController();
 
   bool subVideoSame=false;
-
-  // 测试代码
-  // void runCommand() async {
-  //   String command = 'ffmpeg';
-  //   ProcessResult result = await Process.run(command, ['-version'], runInShell: true);
-
-  //   // 处理结果
-  //   if (result.exitCode == 0) {
-  //     print('FFmpeg 命令执行成功:');
-  //     List<String> lines = result.stdout.split('\n');
-  //     String firstLine = lines.isNotEmpty ? lines.first : "";
-  //     outputInput.text=firstLine;
-  //   } else {
-  //     print('FFmpeg 命令执行失败:');
-  //     print(result.stderr);
-  //   }
-  // }
 
   Future<void> getDefaultFFmpeg() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -287,7 +279,9 @@ class _MainAppState extends State<MainApp> {
             child: SizedBox(
               height: 30,
               width: MediaQuery.of(context).size.width,
-              child: Container(),
+              child: WindowTitleBarBox(
+                child: MoveWindow(),
+              ),
             )
           ),
           Positioned(
