@@ -1,0 +1,4 @@
+*.cpp linguist-language=dart
+*.cmake linguist-language=dart
+*.c linguist-language=dart
+*.h linguist-language=dart
