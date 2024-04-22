@@ -1,36 +1,19 @@
 name: subs
-description: A new Flutter project.
+description: "An adding sub tool"
 publish_to: 'none'
-version: 1.0.1
+version: 1.0.2
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
-  bitsdojo_window: ^0.1.5
-  file_picker: ^5.2.10
-  fluent_ui: ^4.5.1
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
-  get: ^4.6.5
-  path: ^1.8.2
-  process_run: ^0.13.0
-  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
-
-flutter_launcher_icons:
-  windows:
-    generate: true
-    image_path: "assets/icon.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/icon.png"
