@@ -10,7 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+  get: ^4.6.6
   window_manager: ^0.3.8
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -19,6 +22,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: "Noto"
+      fonts:
+        - asset: assets/fonts/NotoSansSC-Bold.ttf
+        - asset: assets/fonts/NotoSansSC-Regular.ttf
 
 flutter_launcher_icons:
   image_path: "assets/icon.png"
