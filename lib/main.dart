@@ -262,6 +262,7 @@ class _AppContentState extends State<AppContent> {
                       videoList=Func().analyseVideos(videoPathInput.text);
                       subList=Func().analyseSubs(subPathInput.text);
                     });
+                    Func().dialog(context, "分析完成", "共有${videoList.length}个视频和${subList.length}个字幕");
                   }, 
                   child: Text("分析路径")
                 )
@@ -275,7 +276,7 @@ class _AppContentState extends State<AppContent> {
               children: [
                 ElevatedButton(
                   onPressed: (){
-                    // TODO 开始任务
+                    Func().startTask(context, ffmpegPathInput.text, videoPathInput.text, subPathInput.text, videoList, subList);
                   }, 
                   child: Text("开始任务")
                 )
