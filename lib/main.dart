@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:process_run/which.dart';
@@ -68,6 +70,9 @@ class _AppContentState extends State<AppContent> {
   TextEditingController videoPathInput=TextEditingController();
   TextEditingController subPathInput=TextEditingController();
 
+  bool samePathWithVideo=false;
+  // bool enableSubButton=true;
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +98,11 @@ class _AppContentState extends State<AppContent> {
         );
       });
     }
+    videoPathInput.addListener(() {
+      if(samePathWithVideo){
+        subPathInput.text=videoPathInput.text;
+      }
+    });
   }
 
   Future<String> pickDir() async {
@@ -138,7 +148,7 @@ class _AppContentState extends State<AppContent> {
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton(
+                        TextButton(
                           onPressed: () async {
                             var dir=await pickDir();
                             if(dir.isNotEmpty){
@@ -171,7 +181,7 @@ class _AppContentState extends State<AppContent> {
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton(
+                        TextButton(
                           onPressed: () async {
                             var dir=await pickDir();
                             if(dir.isNotEmpty){
@@ -204,8 +214,8 @@ class _AppContentState extends State<AppContent> {
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton(
-                          onPressed: () async {
+                        TextButton(
+                          onPressed: samePathWithVideo ? null : () async {
                             var dir=await pickDir();
                             if(dir.isNotEmpty){
                               subPathInput.text=dir;
@@ -216,6 +226,43 @@ class _AppContentState extends State<AppContent> {
                       ],
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 15,),
+              Row(
+                children: [
+                  Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      splashRadius: 0,
+                      value: samePathWithVideo, 
+                      onChanged: (value){
+                        setState(() {
+                          samePathWithVideo=value;
+                        });
+                        if(value){
+                          subPathInput.text=videoPathInput.text;
+                        }
+                      }
+                    ),
+                  ),
+                  SizedBox(width: 5,),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          samePathWithVideo=!samePathWithVideo;
+                        });
+                        if(samePathWithVideo==true){ 
+                          subPathInput.text=videoPathInput.text;
+                        }
+                      },
+                      child: Text(
+                        "字幕路径和视频路径相同"
+                      ),
+                    ),
+                  )
                 ],
               )
             ],
