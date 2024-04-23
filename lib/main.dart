@@ -103,6 +103,14 @@ class _AppContentState extends State<AppContent> {
     return selectedDirectory;
   }
 
+  Future<String> pickFile() async{
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if(result==null){
+      return "";
+    }
+    return result.files.single.path!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
