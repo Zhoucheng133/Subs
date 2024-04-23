@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:subs/components/FileList.dart';
+import 'package:subs/functions/functions.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:process_run/which.dart';
 
@@ -70,7 +70,9 @@ class _AppContentState extends State<AppContent> {
   TextEditingController subPathInput=TextEditingController();
 
   bool samePathWithVideo=false;
-  // bool enableSubButton=true;
+
+  List videoList=[];
+  List subList=[];
 
   @override
   void initState() {
@@ -104,22 +106,6 @@ class _AppContentState extends State<AppContent> {
     });
   }
 
-  Future<String> pickDir() async {
-    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-    if (selectedDirectory == null) {
-      return "";
-    }
-    return selectedDirectory;
-  }
-
-  Future<String> pickFile() async{
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if(result==null){
-      return "";
-    }
-    return result.files.single.path!;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,7 +135,7 @@ class _AppContentState extends State<AppContent> {
                       Expanded(child: Container()),
                       TextButton(
                         onPressed: () async {
-                          var dir=await pickDir();
+                          var dir=await Func().pickFile();
                           if(dir.isNotEmpty){
                             ffmpegPathInput.text=dir;
                           }
@@ -182,7 +168,7 @@ class _AppContentState extends State<AppContent> {
                       Expanded(child: Container()),
                       TextButton(
                         onPressed: () async {
-                          var dir=await pickDir();
+                          var dir=await Func().pickDir();
                           if(dir.isNotEmpty){
                             videoPathInput.text=dir;
                           }
@@ -215,7 +201,7 @@ class _AppContentState extends State<AppContent> {
                       Expanded(child: Container()),
                       TextButton(
                         onPressed: samePathWithVideo ? null : () async {
-                          var dir=await pickDir();
+                          var dir=await Func().pickDir();
                           if(dir.isNotEmpty){
                             subPathInput.text=dir;
                           }
@@ -265,14 +251,17 @@ class _AppContentState extends State<AppContent> {
                 Expanded(child: Container()),
                 ElevatedButton(
                   onPressed: (){
-                    //  TODO 分析路径
+                    setState(() {
+                      videoList=Func().analyseVideos(videoPathInput.text);
+                      subList=Func().analyseSubs(subPathInput.text);
+                    });
                   }, 
                   child: Text("分析路径")
                 )
               ],
             ),
             SizedBox(height: 10,),
-            Expanded(child: FileList()),
+            Expanded(child: FileList(videoList: videoList, subList: subList)),
             SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
