@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:process_run/which.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +32,6 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  TextEditingController ffmpegPathInput=TextEditingController();
-  TextEditingController videoPathInput=TextEditingController();
-  TextEditingController subPathInput=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +49,54 @@ class _MainAppState extends State<MainApp> {
         fontFamily: "Noto",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange)
       ),
-      home: Scaffold(
+      home: AppContent()
+    );
+  }
+}
+
+class AppContent extends StatefulWidget {
+  const AppContent({super.key});
+
+  @override
+  State<AppContent> createState() => _AppContentState();
+}
+
+class _AppContentState extends State<AppContent> {
+
+  TextEditingController ffmpegPathInput=TextEditingController();
+  TextEditingController videoPathInput=TextEditingController();
+  TextEditingController subPathInput=TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    var ffmpegPath = whichSync('ffmpeg');
+    ffmpegPathInput.text=ffmpegPath??"";
+    if(ffmpegPath==null){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context, 
+          builder: (BuildContext context)=>AlertDialog(
+            title: Text("此设备没有安装FFmpeg"),
+            content: Text("务必将FFmpeg添加到系统环境中，当然你也可以手动选择FFmpeg路径"),
+            actions: [
+              ElevatedButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                }, 
+                child: Text("好的")
+              )
+            ],
+          )
+        );
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.all(30.0),
@@ -135,7 +180,6 @@ class _MainAppState extends State<MainApp> {
             ],
           ),
         )
-      ),
-    );
+      );
   }
 }
