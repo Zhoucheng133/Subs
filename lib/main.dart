@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:subs/components/FileList.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:process_run/which.dart';
 
@@ -13,7 +12,7 @@ Future<void> main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 700),
+    size: Size(800, 800),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -124,150 +123,171 @@ class _AppContentState extends State<AppContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: [
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      enabled: false,
-                      controller: ffmpegPathInput,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        isCollapsed: true,
-                        contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-                      ),
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          children: [
+            SizedBox(height: 30,),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    enabled: false,
+                    controller: ffmpegPathInput,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      isCollapsed: true,
+                      contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
                     ),
                   ),
-                  SizedBox(
-                    width: 180,
-                    child: Row(
-                      children: [
-                        Expanded(child: Container()),
-                        TextButton(
-                          onPressed: () async {
-                            var dir=await pickDir();
-                            if(dir.isNotEmpty){
-                              ffmpegPathInput.text=dir;
-                            }
-                          }, 
-                          child: Text("选择FFmpeg路径")
-                        )
-                      ],
-                    ),
+                ),
+                SizedBox(
+                  width: 180,
+                  child: Row(
+                    children: [
+                      Expanded(child: Container()),
+                      TextButton(
+                        onPressed: () async {
+                          var dir=await pickDir();
+                          if(dir.isNotEmpty){
+                            ffmpegPathInput.text=dir;
+                          }
+                        }, 
+                        child: Text("选择FFmpeg路径")
+                      )
+                    ],
                   ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      enabled: false,
-                      controller: videoPathInput,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        isCollapsed: true,
-                        contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-                      ),
-                    )
-                  ),
-                  SizedBox(
-                    width: 180,
-                    child: Row(
-                      children: [
-                        Expanded(child: Container()),
-                        TextButton(
-                          onPressed: () async {
-                            var dir=await pickDir();
-                            if(dir.isNotEmpty){
-                              videoPathInput.text=dir;
-                            }
-                          }, 
-                          child: Text("选择视频路径")
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      enabled: false,
-                      controller: subPathInput,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        isCollapsed: true,
-                        contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-                      ),
-                    )
-                  ),
-                  SizedBox(
-                    width: 180,
-                    child: Row(
-                      children: [
-                        Expanded(child: Container()),
-                        TextButton(
-                          onPressed: samePathWithVideo ? null : () async {
-                            var dir=await pickDir();
-                            if(dir.isNotEmpty){
-                              subPathInput.text=dir;
-                            }
-                          }, 
-                          child: Text("选择字幕路径")
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              Row(
-                children: [
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      splashRadius: 0,
-                      value: samePathWithVideo, 
-                      onChanged: (value){
-                        setState(() {
-                          samePathWithVideo=value;
-                        });
-                        if(value){
-                          subPathInput.text=videoPathInput.text;
-                        }
-                      }
-                    ),
-                  ),
-                  SizedBox(width: 5,),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          samePathWithVideo=!samePathWithVideo;
-                        });
-                        if(samePathWithVideo==true){ 
-                          subPathInput.text=videoPathInput.text;
-                        }
-                      },
-                      child: Text(
-                        "字幕路径和视频路径相同"
-                      ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15,),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    enabled: false,
+                    controller: videoPathInput,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      isCollapsed: true,
+                      contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
                     ),
                   )
-                ],
-              )
-            ],
-          ),
-        )
-      );
+                ),
+                SizedBox(
+                  width: 180,
+                  child: Row(
+                    children: [
+                      Expanded(child: Container()),
+                      TextButton(
+                        onPressed: () async {
+                          var dir=await pickDir();
+                          if(dir.isNotEmpty){
+                            videoPathInput.text=dir;
+                          }
+                        }, 
+                        child: Text("选择视频路径")
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15,),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    enabled: false,
+                    controller: subPathInput,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      isCollapsed: true,
+                      contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                    ),
+                  )
+                ),
+                SizedBox(
+                  width: 180,
+                  child: Row(
+                    children: [
+                      Expanded(child: Container()),
+                      TextButton(
+                        onPressed: samePathWithVideo ? null : () async {
+                          var dir=await pickDir();
+                          if(dir.isNotEmpty){
+                            subPathInput.text=dir;
+                          }
+                        }, 
+                        child: Text("选择字幕路径")
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15,),
+            Row(
+              children: [
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    splashRadius: 0,
+                    value: samePathWithVideo, 
+                    onChanged: (value){
+                      setState(() {
+                        samePathWithVideo=value;
+                      });
+                      if(value){
+                        subPathInput.text=videoPathInput.text;
+                      }
+                    }
+                  ),
+                ),
+                SizedBox(width: 5,),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        samePathWithVideo=!samePathWithVideo;
+                      });
+                      if(samePathWithVideo==true){ 
+                        subPathInput.text=videoPathInput.text;
+                      }
+                    },
+                    child: Text(
+                      "字幕路径和视频路径相同"
+                    ),
+                  ),
+                ),
+                Expanded(child: Container()),
+                ElevatedButton(
+                  onPressed: (){
+                    //  TODO 分析路径
+                  }, 
+                  child: Text("分析路径")
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Expanded(child: FileList()),
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: (){
+                    // TODO 开始任务
+                  }, 
+                  child: Text("开始任务")
+                )
+              ],
+            )
+          ],
+        ),
+      )
+    );
   }
 }
