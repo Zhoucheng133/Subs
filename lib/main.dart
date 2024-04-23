@@ -32,6 +32,8 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   TextEditingController ffmpegPathInput=TextEditingController();
+  TextEditingController videoPathInput=TextEditingController();
+  TextEditingController subPathInput=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,7 @@ class _MainAppState extends State<MainApp> {
                 children: [
                   Expanded(
                     child: TextField(
+                      enabled: false,
                       controller: ffmpegPathInput,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -68,8 +71,65 @@ class _MainAppState extends State<MainApp> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
-                  ElevatedButton(onPressed: (){}, child: Text("选择"))
+                  SizedBox(
+                    width: 180,
+                    child: Row(
+                      children: [
+                        Expanded(child: Container()),
+                        ElevatedButton(onPressed: (){}, child: Text("选择FFmpeg路径"))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15,),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      enabled: false,
+                      controller: videoPathInput,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      ),
+                    )
+                  ),
+                  SizedBox(
+                    width: 180,
+                    child: Row(
+                      children: [
+                        Expanded(child: Container()),
+                        ElevatedButton(onPressed: (){}, child: Text("选择视频路径"))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15,),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      enabled: false,
+                      controller: subPathInput,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      ),
+                    )
+                  ),
+                  SizedBox(
+                    width: 180,
+                    child: Row(
+                      children: [
+                        Expanded(child: Container()),
+                        ElevatedButton(onPressed: (){}, child: Text("选择字幕路径"))
+                      ],
+                    ),
+                  ),
                 ],
               )
             ],
