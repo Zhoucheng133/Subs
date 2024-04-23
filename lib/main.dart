@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:window_manager/window_manager.dart';
@@ -94,6 +95,14 @@ class _AppContentState extends State<AppContent> {
     }
   }
 
+  Future<String> pickDir() async {
+    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+    if (selectedDirectory == null) {
+      return "";
+    }
+    return selectedDirectory;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +130,15 @@ class _AppContentState extends State<AppContent> {
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton(onPressed: (){}, child: Text("选择FFmpeg路径"))
+                        ElevatedButton(
+                          onPressed: () async {
+                            var dir=await pickDir();
+                            if(dir.isNotEmpty){
+                              ffmpegPathInput.text=dir;
+                            }
+                          }, 
+                          child: Text("选择FFmpeg路径")
+                        )
                       ],
                     ),
                   ),
@@ -146,7 +163,15 @@ class _AppContentState extends State<AppContent> {
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton(onPressed: (){}, child: Text("选择视频路径"))
+                        ElevatedButton(
+                          onPressed: () async {
+                            var dir=await pickDir();
+                            if(dir.isNotEmpty){
+                              videoPathInput.text=dir;
+                            }
+                          }, 
+                          child: Text("选择视频路径")
+                        )
                       ],
                     ),
                   ),
@@ -171,7 +196,15 @@ class _AppContentState extends State<AppContent> {
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton(onPressed: (){}, child: Text("选择字幕路径"))
+                        ElevatedButton(
+                          onPressed: () async {
+                            var dir=await pickDir();
+                            if(dir.isNotEmpty){
+                              subPathInput.text=dir;
+                            }
+                          }, 
+                          child: Text("选择字幕路径")
+                        )
                       ],
                     ),
                   ),
