@@ -77,4 +77,12 @@ class Func{
       )
     );
   }
+
+  void startTask(BuildContext context, String ffmepgPath, String videoPath, String subPath, List videoList, List subList){
+    if(subList.length!=videoList.length){
+      dialog(context, "执行失败", "视频和字幕数量不一致");
+      return;
+    }
+    
+  }
 }
