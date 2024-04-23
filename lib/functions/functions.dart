@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 
 class Func{
@@ -60,5 +61,20 @@ class Func{
       return a.compareTo(b);
     });
     return fileNames;
+  }
+
+  void dialog(BuildContext context, String title, String content){
+    showDialog(
+      context: context, 
+      builder: (context)=>AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          ElevatedButton(
+            onPressed: ()=>Navigator.pop(context), child: const Text("好的")
+          )
+        ],
+      )
+    );
   }
 }

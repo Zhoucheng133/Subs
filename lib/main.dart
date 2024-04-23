@@ -251,6 +251,13 @@ class _AppContentState extends State<AppContent> {
                 Expanded(child: Container()),
                 ElevatedButton(
                   onPressed: (){
+                    if(videoPathInput.text.isEmpty){
+                      Func().dialog(context, "操作失败", "没有选择视频路径");
+                      return;
+                    }else if(subPathInput.text.isEmpty){
+                      Func().dialog(context, "操作失败", "没有选择字幕路径");
+                      return;
+                    }
                     setState(() {
                       videoList=Func().analyseVideos(videoPathInput.text);
                       subList=Func().analyseSubs(subPathInput.text);
