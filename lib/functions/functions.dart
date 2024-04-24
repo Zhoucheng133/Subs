@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_brace_in_string_interps
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
+import 'package:process_run/process_run.dart';
 
 class Func{
   Future<String> pickDir() async {
@@ -78,14 +81,25 @@ class Func{
     );
   }
 
-  void startTask(BuildContext context, String ffmepgPath, String videoPath, String subPath, List videoList, List subList){
+  Future<bool> startCheck(BuildContext context, String ffmepgPath, String videoPath, String subPath, String outputPath, List videoList, List subList) async {
     if(subList.length!=videoList.length){
       dialog(context, "执行失败", "视频和字幕数量不一致");
-      return;
+      return false;
     }else if(ffmepgPath.isEmpty){
       dialog(context, "执行失败", "没有选择FFmpeg路径");
-      return;
+      return false;
+    }else if(outputPath.isEmpty){
+      dialog(context, "执行失败", "没有选择输出路径");
+      return false;
+    }else if(outputPath==videoPath){
+      dialog(context, "执行失败", "输出路径和视频路径不能相同");
+      return false;
+    }else if(videoList.isEmpty){
+      dialog(context, "执行失败", "视频列表数量为0, 是否执行了分析路径?");
+      return false;
     }
-    
+    return true;
   }
+
+  
 }
