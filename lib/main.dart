@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:subs/components/FileList.dart';
 import 'package:subs/functions/functions.dart';
@@ -68,6 +69,7 @@ class _AppContentState extends State<AppContent> {
   TextEditingController ffmpegPathInput=TextEditingController();
   TextEditingController videoPathInput=TextEditingController();
   TextEditingController subPathInput=TextEditingController();
+  TextEditingController outputPathInput=TextEditingController();
 
   bool samePathWithVideo=false;
 
@@ -124,7 +126,7 @@ class _AppContentState extends State<AppContent> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       isCollapsed: true,
-                      contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
                     ),
                   ),
                 ),
@@ -157,7 +159,7 @@ class _AppContentState extends State<AppContent> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       isCollapsed: true,
-                      contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
                     ),
                   )
                 ),
@@ -190,7 +192,7 @@ class _AppContentState extends State<AppContent> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       isCollapsed: true,
-                      contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      contentPadding: EdgeInsets.fromLTRB(10, 6, 10, 8),
                     ),
                   )
                 ),
@@ -272,8 +274,35 @@ class _AppContentState extends State<AppContent> {
             Expanded(child: FileList(videoList: videoList, subList: subList)),
             SizedBox(height: 10,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: outputPathInput,
+                          decoration: InputDecoration(
+                            enabled: false,
+                            border: OutlineInputBorder(),
+                            isCollapsed: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+                          ),
+                        )
+                      ),
+                      SizedBox(width: 10,),
+                      TextButton(
+                        onPressed: () async {
+                          var dir=await Func().pickDir();
+                          if(dir.isNotEmpty){
+                            outputPathInput.text=dir;
+                          }
+                        }, 
+                        child: Text("选择输出路径")
+                      )
+                    ],
+                  )
+                ),
+                SizedBox(width: 10,),
                 ElevatedButton(
                   onPressed: (){
                     Func().startTask(context, ffmpegPathInput.text, videoPathInput.text, subPathInput.text, videoList, subList);
