@@ -1,19 +1,21 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:path/path.dart';
+import 'package:process_run/process_run.dart';
 import 'package:subs/components/FileList.dart';
 import 'package:subs/functions/functions.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:process_run/which.dart';
+// import 'package:process_run/which.dart';
+import 'package:path/path.dart' as path;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 800),
+    size: Size(800, 700),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -81,38 +83,20 @@ class _AppContentState extends State<AppContent> {
   int finishedTask=0;
   int allTask=0;
 
+  final func=Func();
+
   @override
   void initState() {
     super.initState();
 
     var ffmpegPath = whichSync('ffmpeg');
     ffmpegPathInput.text=ffmpegPath??"";
-    if(ffmpegPath==null){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-          context: context, 
-          builder: (BuildContext context)=>AlertDialog(
-            title: Text("此设备没有安装FFmpeg"),
-            content: Text("务必将FFmpeg添加到系统环境中，当然你也可以手动选择FFmpeg路径"),
-            actions: [
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                }, 
-                child: Text("好的")
-              )
-            ],
-          )
-        );
-      });
-    }
     videoPathInput.addListener(() {
       if(samePathWithVideo){
         subPathInput.text=videoPathInput.text;
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,7 +126,7 @@ class _AppContentState extends State<AppContent> {
                       Expanded(child: Container()),
                       TextButton(
                         onPressed: running ? null : () async {
-                          var dir=await Func().pickFile();
+                          var dir=await func.pickFile();
                           if(dir.isNotEmpty){
                             ffmpegPathInput.text=dir;
                           }
@@ -175,7 +159,7 @@ class _AppContentState extends State<AppContent> {
                       Expanded(child: Container()),
                       TextButton(
                         onPressed: running ? null : () async {
-                          var dir=await Func().pickDir();
+                          var dir=await func.pickDir();
                           if(dir.isNotEmpty){
                             videoPathInput.text=dir;
                           }
@@ -208,7 +192,7 @@ class _AppContentState extends State<AppContent> {
                       Expanded(child: Container()),
                       TextButton(
                         onPressed: running ? null : samePathWithVideo ? null : () async {
-                          var dir=await Func().pickDir();
+                          var dir=await func.pickDir();
                           if(dir.isNotEmpty){
                             subPathInput.text=dir;
                           }
@@ -259,17 +243,17 @@ class _AppContentState extends State<AppContent> {
                 ElevatedButton(
                   onPressed: (){
                     if(videoPathInput.text.isEmpty){
-                      Func().dialog(context, "操作失败", "没有选择视频路径");
+                      func.dialog(context, "操作失败", "没有选择视频路径");
                       return;
                     }else if(subPathInput.text.isEmpty){
-                      Func().dialog(context, "操作失败", "没有选择字幕路径");
+                      func.dialog(context, "操作失败", "没有选择字幕路径");
                       return;
                     }
                     setState(() {
-                      videoList=Func().analyseVideos(videoPathInput.text);
-                      subList=Func().analyseSubs(subPathInput.text);
+                      videoList=func.analyseVideos(videoPathInput.text);
+                      subList=func.analyseSubs(subPathInput.text);
                     });
-                    Func().dialog(context, "分析完成", "共有${videoList.length}个视频和${subList.length}个字幕");
+                    func.dialog(context, "分析完成", "共有${videoList.length}个视频和${subList.length}个字幕");
                   }, 
                   child: Text("分析路径")
                 )
@@ -297,7 +281,7 @@ class _AppContentState extends State<AppContent> {
                       SizedBox(width: 10,),
                       TextButton(
                         onPressed: running ? null : () async {
-                          var dir=await Func().pickDir();
+                          var dir=await func.pickDir();
                           if(dir.isNotEmpty){
                             outputPathInput.text=dir;
                           }
@@ -310,15 +294,38 @@ class _AppContentState extends State<AppContent> {
                 SizedBox(width: 10,),
                 ElevatedButton(
                   onPressed: () async {
+                    var shell=Shell();
                     if(!running){
-                      if(await Func().startCheck(context, ffmpegPathInput.text, videoPathInput.text, subPathInput.text, outputPathInput.text, videoList, subList)==true){
+                      if(await func.startCheck(context, ffmpegPathInput.text, videoPathInput.text, subPathInput.text, outputPathInput.text, videoList, subList)==true){
                         setState(() {
                           running=true;
                           allTask=videoList.length;
                           finishedTask=0;
                         });
+                        
+                        for (var element=0; element<videoList.length; element+=1) {
+                          if(!running){
+                            break;
+                          }
+                          print("run: ${element}");
+                          final ffmpeg=ffmpegPathInput.text;
+                          final video=path.Context(style: Style.platform).join(videoPathInput.text, videoList[element]);
+                          final sub=path.Context(style: Style.platform).join(subPathInput.text, subList[element]);
+                          final output=path.Context(style: Style.platform).join(outputPathInput.text, videoList[element].replaceAll("mkv", "mp4"));
+                          final command='''
+${ffmpeg} -i "${video}" -vf "ass='${sub}'" "${output}"
+''';
+                          try {
+                            await shell.run(command);
+                          } on ShellException catch (_){
+                          }
+                          setState(() {
+                            finishedTask+=1;
+                          });
+                        }
                       }
                     }else{
+                      shell.kill();
                       setState(() {
                         running=false;
                       });

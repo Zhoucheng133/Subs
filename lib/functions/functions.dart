@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
-import 'package:process_run/process_run.dart';
 
 class Func{
   Future<String> pickDir() async {
@@ -100,6 +99,4 @@ class Func{
     }
     return true;
   }
-
-  
 }
