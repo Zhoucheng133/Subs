@@ -240,9 +240,9 @@ class _MainAppState extends State<MainApp> {
 
       // 运行在这里
       for(var i=0; i<c.videoFiles.length; i++){
-        String videoPath=normalize(c.videoFiles[i].replaceAll(" ", "\\ "));
-        String subPath=normalize(c.subFiles[i].replaceAll(" ", "\\ "));
-        String savePath='${normalize(c.outputDir.value)}/${basename(c.videoFiles[i]).replaceAll("mkv", "mp4").replaceAll(" ", "\\ ")}';
+        String videoPath=c.videoFiles[i];
+        String subPath=c.subFiles[i];
+        String savePath=path.join(c.outputDir.value, basename(c.videoFiles[i]).replaceAll("mkv", "mp4"));
 
         // print("取消执行本次循环: ${c.stopProcess.value}");
 
