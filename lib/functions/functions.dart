@@ -82,6 +82,9 @@ class Func{
     if(subList.length!=videoList.length){
       dialog(context, "执行失败", "视频和字幕数量不一致");
       return;
+    }else if(ffmepgPath.isEmpty){
+      dialog(context, "执行失败", "没有选择FFmpeg路径");
+      return;
     }
     
   }
