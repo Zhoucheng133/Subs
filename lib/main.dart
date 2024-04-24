@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:process_run/process_run.dart';
@@ -268,6 +269,9 @@ ${ffmpegInput.text} -i "${videoPath}" -vf "ass='${subPath}'" "${savePath}"
     }
   }
 
+  bool hoverMin=false;
+  bool hoverClose=false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -277,18 +281,61 @@ ${ffmpegInput.text} -i "${videoPath}" -vf "ass='${subPath}'" "${savePath}"
           Positioned(
             top: 0,
             left: 0,
-            child: SizedBox(
+            child: Container(
+              // color: Colors.red,
               height: 30,
               width: MediaQuery.of(context).size.width,
-              child: WindowTitleBarBox(
-                child: MoveWindow(),
-              ),
+              child: Platform.isWindows ? Row(
+                children: [
+                  Expanded(child: MoveWindow()),
+                  GestureDetector(
+                    onTap: () => appWindow.minimize(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      onEnter: (event) => setState(() { hoverMin=true; }),
+                      onExit: (event) => setState(() { hoverMin=false; }),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        color: hoverMin ? Colors.grey[40] : Colors.white,
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.minus,
+                            size: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => appWindow.close(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      onEnter: (event) => setState(() { hoverClose=true; }),
+                      onExit: (event) => setState(() { hoverClose=false; }),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        color: hoverClose ? Colors.red.darker : Colors.red,
+                        width: 30,
+                        height: 30,
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.xmark,
+                            size: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ) : MoveWindow(),
             )
           ),
           Positioned(
             top: 30,
             child: Container(
-              // color: Colors.red,
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
