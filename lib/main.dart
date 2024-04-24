@@ -7,11 +7,12 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:process_run/process_run.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/component/subIndex.dart';
 import 'package:subs/paras/paras.dart';
+import 'package:path/path.dart';
 
 Future<void> main() async {
   runApp(MyApp());
@@ -250,13 +251,13 @@ class _MainAppState extends State<MainApp> {
           break;
         }
 
-        var command="${ffmpegInput.text} -i ${videoPath} -vf ${subPath.endsWith("ass") ? "ass=${subPath}" : "subtitles=${subPath}"} ${savePath}";
-        // print("------|${command}|-----");
+        var command='''
+${ffmpegInput.text} -i "${videoPath}" -vf "ass='${subPath}'" "${savePath}"
+''';
+        // print("------\n${command}\n-----");
         try {
           await shell.run(command);
-          // print("stdout: ${result.outText}");
         } on ShellException catch (_){
-          // print("执行出现错误");
           c.updateStopProcess(true);
         }
 
