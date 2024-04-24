@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -76,6 +76,11 @@ class _AppContentState extends State<AppContent> {
   List videoList=[];
   List subList=[];
 
+  bool running=false;
+
+  int finishedTask=0;
+  int allTask=0;
+
   @override
   void initState() {
     super.initState();
@@ -136,7 +141,7 @@ class _AppContentState extends State<AppContent> {
                     children: [
                       Expanded(child: Container()),
                       TextButton(
-                        onPressed: () async {
+                        onPressed: running ? null : () async {
                           var dir=await Func().pickFile();
                           if(dir.isNotEmpty){
                             ffmpegPathInput.text=dir;
@@ -169,7 +174,7 @@ class _AppContentState extends State<AppContent> {
                     children: [
                       Expanded(child: Container()),
                       TextButton(
-                        onPressed: () async {
+                        onPressed: running ? null : () async {
                           var dir=await Func().pickDir();
                           if(dir.isNotEmpty){
                             videoPathInput.text=dir;
@@ -202,7 +207,7 @@ class _AppContentState extends State<AppContent> {
                     children: [
                       Expanded(child: Container()),
                       TextButton(
-                        onPressed: samePathWithVideo ? null : () async {
+                        onPressed: running ? null : samePathWithVideo ? null : () async {
                           var dir=await Func().pickDir();
                           if(dir.isNotEmpty){
                             subPathInput.text=dir;
@@ -291,7 +296,7 @@ class _AppContentState extends State<AppContent> {
                       ),
                       SizedBox(width: 10,),
                       TextButton(
-                        onPressed: () async {
+                        onPressed: running ? null : () async {
                           var dir=await Func().pickDir();
                           if(dir.isNotEmpty){
                             outputPathInput.text=dir;
@@ -304,13 +309,34 @@ class _AppContentState extends State<AppContent> {
                 ),
                 SizedBox(width: 10,),
                 ElevatedButton(
-                  onPressed: (){
-                    Func().startTask(context, ffmpegPathInput.text, videoPathInput.text, subPathInput.text, videoList, subList);
+                  onPressed: () async {
+                    if(!running){
+                      if(await Func().startCheck(context, ffmpegPathInput.text, videoPathInput.text, subPathInput.text, outputPathInput.text, videoList, subList)==true){
+                        setState(() {
+                          running=true;
+                          allTask=videoList.length;
+                          finishedTask=0;
+                        });
+                      }
+                    }else{
+                      setState(() {
+                        running=false;
+                      });
+                    }
                   }, 
-                  child: Text("开始任务")
+                  child: running ? Row(
+                    children: [
+                      Icon(
+                        Icons.square_rounded,
+                        size: 16,
+                      ),
+                      SizedBox(width: 5,),
+                      Text("${finishedTask}/${allTask}")
+                    ],
+                  ) : Text("开始任务"),
                 )
               ],
-            )
+            ),
           ],
         ),
       )
