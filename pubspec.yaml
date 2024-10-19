@@ -1,0 +1,31 @@
+name: subs
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.1.0
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fluent_ui: ^4.9.2
+  shared_preferences: ^2.3.2
+  file_picker: ^8.1.2
+  url_launcher: ^6.3.1
+  google_fonts: ^6.2.1
+  process_run: ^1.2.1
+  window_manager: ^0.4.2
+  path: ^1.9.0
+  get: ^4.6.6
+  font_awesome_flutter: ^10.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
