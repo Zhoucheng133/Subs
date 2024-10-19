@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart' show basename, extension;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/service.dart';
 import 'package:subs/variables.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +23,7 @@ class MainWindow extends StatefulWidget {
 class _MainWindowState extends State<MainWindow> with WindowListener {
 
   final Variables v = Get.put(Variables());
+  late SharedPreferences prefs;
 
   void checkFFmpeg(){
     var path = whichSync('ffmpeg');
@@ -44,11 +46,20 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     }
   }
 
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final String? outputPref = prefs.getString('output');
+    if(outputPref!=null){
+      output.text=outputPref;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     windowManager.addListener(this);
     checkFFmpeg();
+    initPrefs();
     videoInput.addListener((){
       if(samePath){
         subInput.text=videoInput.text;
@@ -89,6 +100,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
     if (selectedDirectory != null) {
       output.text=selectedDirectory;
+      prefs.setString('output', selectedDirectory);
     }
   }
 
