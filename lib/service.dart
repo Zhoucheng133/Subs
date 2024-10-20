@@ -22,7 +22,7 @@ class Task{
           content: Text('没有选择输出目录', style: GoogleFonts.notoSansSc(),),
           actions: [
             FilledButton(
-              child: Text('完成', style: GoogleFonts.notoSansSc(),),
+              child: Text('好的', style: GoogleFonts.notoSansSc(),),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -39,7 +39,7 @@ class Task{
           content: Text('视频数量和字幕数量不一致', style: GoogleFonts.notoSansSc(),),
           actions: [
             FilledButton(
-              child: Text('完成', style: GoogleFonts.notoSansSc(),),
+              child: Text('好的', style: GoogleFonts.notoSansSc(),),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -56,7 +56,7 @@ class Task{
           content: Text('输出路径不能和视频路径相同', style: GoogleFonts.notoSansSc(),),
           actions: [
             FilledButton(
-              child: Text('完成', style: GoogleFonts.notoSansSc(),),
+              child: Text('好的', style: GoogleFonts.notoSansSc(),),
               onPressed: (){
                 Navigator.pop(context);
               }

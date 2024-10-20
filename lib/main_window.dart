@@ -153,7 +153,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           content: Text('没有选择视频目录', style: GoogleFonts.notoSansSc(),),
           actions: [
             FilledButton(
-              child: Text('完成', style: GoogleFonts.notoSansSc(),),
+              child: Text('好的', style: GoogleFonts.notoSansSc(),),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -170,7 +170,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           content: Text('没有选择字幕目录', style: GoogleFonts.notoSansSc(),),
           actions: [
             FilledButton(
-              child: Text('完成', style: GoogleFonts.notoSansSc(),),
+              child: Text('好的', style: GoogleFonts.notoSansSc(),),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -193,7 +193,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           content: Text('共找到${videos.length}个视频文件和${subs.length}个字幕文件', style: GoogleFonts.notoSansSc(),),
           actions: [
             FilledButton(
-              child: Text('完成', style: GoogleFonts.notoSansSc(),),
+              child: Text('好的', style: GoogleFonts.notoSansSc(),),
               onPressed: (){
                 Navigator.pop(context);
               }
