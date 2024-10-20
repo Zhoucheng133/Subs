@@ -116,6 +116,22 @@ ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -vf "ass='${basename(subPath)}'" 
     }
     if(context.mounted){
       Navigator.pop(context);
+      if(!v.stopTask.value){
+        showDialog(
+          context: context, 
+          builder: (context)=>ContentDialog(
+            title: Text('任务已完成', style: GoogleFonts.notoSansSc(),),
+            actions: [
+              FilledButton(
+                child: Text('好的', style: GoogleFonts.notoSansSc(),),
+                onPressed: (){
+                  Navigator.pop(context);
+                }
+              )
+            ],
+          )
+        );
+      }
     }
   }
 }
