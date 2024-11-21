@@ -106,11 +106,11 @@ class Task{
       var command='';
       if(useSize){
         command='''
-ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
+ffmpeg -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
 ''';
       }else{
         command='''
-ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
+ffmpeg -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
 ''';
       }
       
