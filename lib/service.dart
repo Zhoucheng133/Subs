@@ -88,6 +88,7 @@ class Task{
           height: 300,
           width: 500,
           child: Obx(() => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("共有${v.length.value}个任务，已经完成了${v.finished.value}个", style: GoogleFonts.notoSansSc(),),
               const SizedBox(height: 10,),
