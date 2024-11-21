@@ -7,5 +7,5 @@ class Variables extends GetxController {
 
   RxList log=[].obs;
 
-  String version='v1.1.1';
+  String version='v1.2.0';
 }
