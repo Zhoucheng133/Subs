@@ -104,7 +104,7 @@ class Task{
         break;
       }
       var command='''
-ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
+ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
 ''';
       try {
         await shell.run(command);
