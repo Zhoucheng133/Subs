@@ -111,6 +111,10 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   List videos=[];
   bool samePath=false;
   Task task=Task();
+  bool useSize=false;
+
+  int width=1920;
+  int height=1080;
 
   Future<void> scanVideo(Directory directory) async {
     var files=[];
@@ -394,6 +398,59 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     )
                   ],
                 ),
+                const SizedBox(height: 10,),
+                Row(
+                  children: [
+                    Checkbox(
+                      checked: useSize, 
+                      onChanged: (val){
+                        setState(() {
+                          useSize=val??false;
+                        });
+                        subInput.text=videoInput.text;
+                      },
+                      content: Text(
+                        '指定大小',
+                        style: GoogleFonts.notoSansSc(),
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
+                    SizedBox(
+                      width: 120,
+                      child: NumberBox(
+                        clearButton: false,
+                        mode: SpinButtonPlacementMode.inline,
+                        value: useSize ?  width : 0, 
+                        onChanged: useSize ? (val){
+                          if(val!=null){
+                            setState(() {
+                              width=val as int;
+                            });
+                          }
+                        }: null
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                      child: FaIcon(FontAwesomeIcons.xmark),
+                    ),
+                    SizedBox(
+                      width: 120,
+                      child: NumberBox(
+                        clearButton: false,
+                        mode: SpinButtonPlacementMode.inline,
+                        value: useSize ?  height : 0, 
+                        onChanged: useSize ? (val){
+                          if(val!=null){
+                            setState(() {
+                              height=val as int;
+                            });
+                          }
+                        }: null
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -487,7 +544,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                 ),
                 const SizedBox(width: 10,),
                 FilledButton(
-                  onPressed: (videos.isEmpty && subs.isEmpty) ? null : ()=>task.convert(videos, subs, output.text, context, videoInput.text, subInput.text),
+                  onPressed: (videos.isEmpty && subs.isEmpty) ? null : ()=>task.convert(videos, subs, output.text, context, videoInput.text, subInput.text, useSize, width, height),
                   child: Text('开始任务', style: GoogleFonts.notoSansSc(),)
                 )
               ],
