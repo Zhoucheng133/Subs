@@ -13,7 +13,7 @@ class Task{
 
   final Variables v = Get.put(Variables());
 
-  Future<void> convert(List videos, List subs, String output, BuildContext context, String videoInput, String subInput) async {
+  Future<void> convert(List videos, List subs, String output, BuildContext context, String videoInput, String subInput, bool useSize, int width, int height) async {
     if(output.isEmpty){
       await showDialog(
         context: context, 
@@ -103,9 +103,17 @@ class Task{
       if(v.stopTask.value){
         break;
       }
-      var command='''
+      var command='';
+      if(useSize){
+        command='''
 ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
 ''';
+      }else{
+        command='''
+ffmpeg -i "${videoPath.replaceAll("\\", "/")}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
+''';
+      }
+      
       try {
         await shell.run(command);
       } on ShellException catch (_){
