@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 
+import 'dart:convert';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -66,12 +68,11 @@ class Task{
       );
       return;
     }
-    
+    late Shell shell;
+    late ShellLinesController controller;
     v.finished.value=0;
     v.stopTask.value=false;
     v.length.value=videos.length;
-
-    var shell=Shell(workingDirectory: subInput);
 
     showDialog(
       context: context, 
@@ -83,7 +84,25 @@ class Task{
             Text("执行中...", style: GoogleFonts.notoSansSc()),
           ],
         ),
-        content: Obx(() => Text("共有${v.length.value}个任务，已经完成了${v.finished.value}个", style: GoogleFonts.notoSansSc(),)),
+        content: SizedBox(
+          height: 300,
+          width: 500,
+          child: Obx(() => Column(
+            children: [
+              Text("共有${v.length.value}个任务，已经完成了${v.finished.value}个", style: GoogleFonts.notoSansSc(),),
+              const SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: v.log.length,
+                  itemBuilder: (context, index)=>Text(
+                    v.log[index],
+                    style: GoogleFonts.notoSansSc(),
+                  ),
+                ),
+              ),
+            ],
+          )),
+        ),
         actions: [
           FilledButton(
             onPressed: () {
@@ -97,6 +116,7 @@ class Task{
     );
 
     for(var i=0; i<videos.length; i++){
+      v.log.value=[];
       String videoPath=videos[i];
       String subPath=subs[i];
       String savePath=p.join(output, basename(videoPath).replaceAll("mkv", "mp4"));
@@ -113,8 +133,16 @@ ffmpeg -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'"
 ffmpeg -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
 ''';
       }
-      
+      controller=ShellLinesController(encoding: utf8);
+      shell=Shell(workingDirectory: subInput, stdout: controller.sink, stderr: controller.sink);
+
       try {
+        controller.stream.listen((event){
+          if(v.log.length>=50){
+            v.log.removeAt(0);
+          }
+          v.log.insert(0, event);
+        });
         await shell.run(command);
       } on ShellException catch (_){
       }
