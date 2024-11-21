@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' show showLicensePage;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -274,6 +275,33 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                                       '本项目地址',
                                       style:  GoogleFonts.notoSansSc(
                                 
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: ()=>showLicensePage(context: context),
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const FaIcon(
+                                      FontAwesomeIcons.certificate,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(width: 5,),
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 2),
+                                      child: Text(
+                                        '许可证',
+                                        style: GoogleFonts.notoSansSc(
+                                          fontSize: 13,
+                                        ),
                                       ),
                                     )
                                   ],
