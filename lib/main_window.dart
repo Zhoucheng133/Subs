@@ -26,10 +26,10 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   late SharedPreferences prefs;
 
   void checkFFmpeg(){
-    var path = whichSync('ffmpeg1');
+    var path = whichSync('ffmpeg');
     if(path==null){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showDialog(
           context: context, 
           builder: (context)=>ContentDialog(
             title: Text('没有检测到FFmpeg', style: GoogleFonts.notoSansSc(),),
@@ -49,6 +49,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     Navigator.pop(context);
                   }
                   prefs.setString('ffmpeg', v.ffmpegPath.value);
+                  setState(() {
+                    ffmpegInput.text=v.ffmpegPath.value;
+                  });
                 },
                 child: Text('选择FFmpeg路径', style: GoogleFonts.notoSansSc(),)
               )
@@ -58,6 +61,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
       });
     }else{
       v.ffmpegPath.value=path;
+      setState(() {
+        ffmpegInput.text=v.ffmpegPath.value;
+      });
     }
   }
 
@@ -67,6 +73,15 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     if(outputPref!=null){
       output.text=outputPref;
     }
+    final String? ffmpegPath=prefs.getString('ffmpeg');
+    if(ffmpegPath!=null){
+      v.ffmpegPath.value=ffmpegPath;
+      setState(() {
+        ffmpegInput.text=ffmpegPath;
+      });
+    }else{
+      checkFFmpeg();
+    }
   }
 
   @override
@@ -74,7 +89,6 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     super.initState();
     windowManager.addListener(this);
     initPrefs();
-    checkFFmpeg();
     videoInput.addListener((){
       if(samePath){
         subInput.text=videoInput.text;
@@ -119,6 +133,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     }
   }
 
+  var ffmpegInput=TextEditingController();
   var videoInput=TextEditingController();
   var subInput=TextEditingController();
   var output=TextEditingController();
@@ -225,6 +240,17 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
 
   bool hoverAbout=false;
 
+  Future<void> pickFFmpeg() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if(result!=null){
+      v.ffmpegPath.value=result.files.single.path!;
+    }
+    prefs.setString('ffmpeg', v.ffmpegPath.value);
+    setState(() {
+      ffmpegInput.text=v.ffmpegPath.value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -283,13 +309,40 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
               children: [
                 Row(
                   children: [
-                    Text(
-                      '视频目录',
-                      style: GoogleFonts.notoSansSc(
-                        fontSize: 15
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        'FFmpeg 路径',
+                        style: GoogleFonts.notoSansSc(
+                          fontSize: 15
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextBox(
+                        enabled: false,
+                        controller: ffmpegInput,
                       ),
                     ),
                     const SizedBox(width: 10,),
+                    Button(
+                      child: Text('选择', style: GoogleFonts.notoSansSc(),), 
+                      onPressed: ()=>pickFFmpeg(),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        '视频目录',
+                        style: GoogleFonts.notoSansSc(
+                          fontSize: 15
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: TextBox(
                         enabled: false,
@@ -306,13 +359,15 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                 const SizedBox(height: 10,),
                 Row(
                   children: [
-                    Text(
-                      '字幕目录',
-                      style: GoogleFonts.notoSansSc(
-                        fontSize: 15
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        '字幕目录',
+                        style: GoogleFonts.notoSansSc(
+                          fontSize: 15
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 10,),
                     Expanded(
                       child: TextBox(
                         enabled: false,
