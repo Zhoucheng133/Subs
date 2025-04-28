@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   fluent_ui: ^4.9.2
   shared_preferences: ^2.3.2
   file_picker: ^8.1.2

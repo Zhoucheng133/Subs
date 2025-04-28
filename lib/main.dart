@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter/material.dart';
 import 'package:subs/main_window.dart';
 import 'package:window_manager/window_manager.dart';
@@ -29,6 +30,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('zh', 'CN'),
+      ],
       debugShowCheckedModeBanner: false,
       theme: FluentThemeData(
         accentColor: Colors.orange
