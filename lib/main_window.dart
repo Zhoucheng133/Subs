@@ -26,7 +26,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   late SharedPreferences prefs;
 
   void checkFFmpeg(){
-    var path = whichSync('ffmpeg');
+    var path = whichSync('ffmpeg1');
     if(path==null){
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showDialog(
@@ -35,14 +35,29 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
             title: Text('没有检测到FFmpeg', style: GoogleFonts.notoSansSc(),),
             content: Text('请检查是否安装了FFmpeg以及是否在环境变量中', style: GoogleFonts.notoSansSc(),),
             actions: [
-              FilledButton(
+              Button(
                 child: Text('关闭 Subs', style: GoogleFonts.notoSansSc(),), 
                 onPressed: ()=>close()
+              ),
+              FilledButton(
+                onPressed: () async {
+                  FilePickerResult? result = await FilePicker.platform.pickFiles();
+                  if(result!=null){
+                    v.ffmpegPath.value=result.files.single.path!;
+                  }
+                  if(context.mounted){
+                    Navigator.pop(context);
+                  }
+                  prefs.setString('ffmpeg', v.ffmpegPath.value);
+                },
+                child: Text('选择FFmpeg路径', style: GoogleFonts.notoSansSc(),)
               )
             ],
           )
         );
       });
+    }else{
+      v.ffmpegPath.value=path;
     }
   }
 
@@ -58,8 +73,8 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   void initState() {
     super.initState();
     windowManager.addListener(this);
-    checkFFmpeg();
     initPrefs();
+    checkFFmpeg();
     videoInput.addListener((){
       if(samePath){
         subInput.text=videoInput.text;

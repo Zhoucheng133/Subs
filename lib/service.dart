@@ -229,11 +229,11 @@ class Task{
       var command='';
       if(useSize){
         command='''
-ffmpeg -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
+${v.ffmpegPath.value} -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
 ''';
       }else{
         command='''
-ffmpeg -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
+${v.ffmpegPath.value} -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
 ''';
       }
       controller=ShellLinesController(encoding: utf8);

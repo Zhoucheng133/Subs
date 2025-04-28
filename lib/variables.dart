@@ -8,4 +8,6 @@ class Variables extends GetxController {
   RxList log=[].obs;
 
   String version='v1.2.0';
+
+  RxString ffmpegPath=''.obs;
 }
