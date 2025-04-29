@@ -229,16 +229,15 @@ class Task{
       var command='';
       if(useSize){
         command='''
-${v.ffmpegPath.value} -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
+${v.ffmpegPath.value} -i "${videoPath}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
 ''';
       }else{
         command='''
-${v.ffmpegPath.value} -i "${basename(videoPath)}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
+${v.ffmpegPath.value} -i "${videoPath}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
 ''';
       }
       controller=ShellLinesController(encoding: utf8);
       shell=Shell(workingDirectory: subInput, stdout: controller.sink, stderr: controller.sink);
-
       try {
         controller.stream.listen((event){
           if(v.log.length>=50){

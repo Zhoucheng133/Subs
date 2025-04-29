@@ -414,7 +414,6 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                         setState(() {
                           useSize=val??false;
                         });
-                        subInput.text=videoInput.text;
                       },
                       content: Text(
                         '指定大小',
