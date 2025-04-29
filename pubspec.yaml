@@ -21,6 +21,7 @@ dependencies:
   path: ^1.9.0
   get: ^4.6.6
   font_awesome_flutter: ^10.7.0
+  package_info_plus: ^8.3.0
 
 dev_dependencies:
   flutter_test:
