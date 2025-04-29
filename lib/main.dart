@@ -17,6 +17,7 @@ Future<void> main() async {
     minimumSize: Size(800, 700),
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.setResizable(false);
     await windowManager.show();
     await windowManager.focus();
   });
