@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' show basename, extension;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/service.dart';
@@ -82,6 +83,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     }else{
       checkFFmpeg();
     }
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    v.version.value='v${packageInfo.version}';
   }
 
   @override
@@ -168,7 +172,6 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
         if(extension(entity.path)=='.srt' || extension(entity.path)=='.ass'){
           files.add(entity.path);
         }
-        // print(basename(entity.path));
       }
     }
     files.sort();

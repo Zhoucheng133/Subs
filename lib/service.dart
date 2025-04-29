@@ -44,7 +44,7 @@ class Task{
             ),
             const SizedBox(height: 10,),
             Text(
-              v.version,
+              v.version.value,
               style: GoogleFonts.notoSansSc(
                 color: Colors.grey[80],
               ),
@@ -78,7 +78,11 @@ class Task{
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: ()=>showLicensePage(context: context),
+              onTap: ()=>showLicensePage(
+                applicationName: 'Subs',
+                applicationVersion: 'v${v.version.value}',
+                context: context
+              ),
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Row(
