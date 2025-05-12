@@ -14,6 +14,19 @@ import 'package:subs/variables.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:process_run/which.dart';
 
+enum VideoEncoder{
+  libx264,
+  libx265,
+  libxvid,
+  av1
+}
+
+enum AudioEncoder{
+  aac,
+  libmp3lame,
+  flac,  
+}
+
 class MainWindow extends StatefulWidget {
   const MainWindow({super.key});
 
@@ -146,6 +159,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   bool samePath=false;
   Task task=Task();
   bool useSize=false;
+  bool useEncoder=false;
+  VideoEncoder videoEncoder=VideoEncoder.libx264;
+  AudioEncoder audioEncoder=AudioEncoder.aac;
 
   int width=1920;
   int height=1080;
@@ -423,7 +439,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                         style: GoogleFonts.notoSansSc(),
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(width: 20,),
                     SizedBox(
                       width: 120,
                       child: NumberBox(
@@ -456,6 +472,70 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                             });
                           }
                         }: null
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                Row(
+                  children: [
+                    Checkbox(
+                      checked: useEncoder, 
+                      onChanged: (val){
+                        setState(() {
+                          useEncoder=val??false;
+                        });
+                      },
+                      content: Text(
+                        '指定编码',
+                        style: GoogleFonts.notoSansSc(),
+                      ),
+                    ),
+                    const SizedBox(width: 20,),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Text("视频: ", style: GoogleFonts.notoSansSc()),
+                    ),
+                    SizedBox(
+                      width: 125,
+                      child: ComboBox(
+                        isExpanded: true,
+                        value: videoEncoder,
+                        items: VideoEncoder.values.map((item)=>ComboBoxItem(
+                          enabled: useEncoder,
+                          value: item,
+                          child: Text(item.name, style: GoogleFonts.notoSansSc()),
+                        )).toList(),
+                        onChanged: useEncoder ? (item){
+                          if(item!=null){
+                            setState(() {
+                              videoEncoder=item as VideoEncoder;
+                            });
+                          }
+                        } : null,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10, left: 10),
+                      child: Text("音频: ", style: GoogleFonts.notoSansSc()),
+                    ),
+                    SizedBox(
+                      width: 125,
+                      child: ComboBox(
+                        isExpanded: true,
+                        value: audioEncoder,
+                        items: AudioEncoder.values.map((item)=>ComboBoxItem(
+                          enabled: useEncoder,
+                          value: item,
+                          child: Text(item.name, style: GoogleFonts.notoSansSc()),
+                        )).toList(),
+                        onChanged: useEncoder ? (item){
+                          if(item!=null){
+                            setState(() {
+                              audioEncoder=item as AudioEncoder;
+                            });
+                          }
+                        } : null,
                       ),
                     ),
                   ],
@@ -553,7 +633,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                 ),
                 const SizedBox(width: 10,),
                 FilledButton(
-                  onPressed: (videos.isEmpty && subs.isEmpty) ? null : ()=>task.convert(videos, subs, output.text, context, videoInput.text, subInput.text, useSize, width, height),
+                  onPressed: (videos.isEmpty && subs.isEmpty) ? null : ()=>task.convert(videos, subs, output.text, context, videoInput.text, subInput.text, useSize, width, height, videoEncoder, audioEncoder),
                   child: Text('开始任务', style: GoogleFonts.notoSansSc(),)
                 )
               ],
