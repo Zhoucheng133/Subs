@@ -11,12 +11,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart' show basename;
 import 'package:process_run/process_run.dart';
+import 'package:subs/main_window.dart';
 import 'package:subs/variables.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Task{
 
   final Variables v = Get.put(Variables());
+
+  String sizeCmd(bool useSize, int width, int height){
+    if(useSize){
+      return "-s ${width}x${height} ";
+    }
+    return "";
+  }
+
+  String encoderCmd(VideoEncoder videoEncoder, AudioEncoder audioEncoder){
+    if(videoEncoder==VideoEncoder.av1){
+      return "-c:v libaom-av1 -c:a ${audioEncoder.name}";
+    }
+    return "-c:v ${videoEncoder.name} -c:a ${audioEncoder.name}";
+  }
 
   void showAbout(BuildContext context){
     showDialog(
@@ -121,7 +136,18 @@ class Task{
     );
   }
 
-  Future<void> convert(List videos, List subs, String output, BuildContext context, String videoInput, String subInput, bool useSize, int width, int height) async {
+  Future<void> convert(
+    List videos, List subs, 
+    String output, 
+    BuildContext context, 
+    String videoInput, 
+    String subInput, 
+    bool useSize, 
+    int width, 
+    int height, 
+    VideoEncoder videoEncoder, 
+    AudioEncoder audioEncoder
+  ) async {
     if(output.isEmpty){
       await showDialog(
         context: context, 
@@ -231,15 +257,10 @@ class Task{
         break;
       }
       var command='';
-      if(useSize){
-        command='''
-${v.ffmpegPath.value} -i "${videoPath}" -c:v libx264 -vf "ass='${basename(subPath)}'" -s ${width}x${height} "${savePath.replaceAll("\\", "/")}"
+      command='''
+${v.ffmpegPath.value} -i "${videoPath}" -vf "ass='${basename(subPath)}'" ${sizeCmd(useSize, width, height)}${encoderCmd(videoEncoder, audioEncoder)} "${savePath.replaceAll("\\", "/")}"
 ''';
-      }else{
-        command='''
-${v.ffmpegPath.value} -i "${videoPath}" -c:v libx264 -vf "ass='${basename(subPath)}'" "${savePath.replaceAll("\\", "/")}"
-''';
-      }
+      // print(command);
       controller=ShellLinesController(encoding: utf8);
       shell=Shell(workingDirectory: subInput, stdout: controller.sink, stderr: controller.sink);
       try {
