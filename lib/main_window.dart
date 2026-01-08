@@ -288,9 +288,10 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                       onTap: (){
                         task.showAbout(context);
                       },
-                      child: Container(
-                        color: hoverAbout ? Colors.grey[20] : Colors.white,
+                      child: AnimatedContainer(
+                        color: hoverAbout ? Theme.of(context).brightness==Brightness.dark ? Colors.grey[200] : Colors.grey[20] : Theme.of(context).brightness==Brightness.dark ? Colors.black : Colors.white,
                         width: 50,
+                        duration: const Duration(milliseconds: 200),
                         child: MouseRegion(
                           onEnter: (_){
                             setState(() {
@@ -313,9 +314,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     ),
                     WindowCaptionButton.minimize(
                       onPressed: ()=>minimize(),
+                      brightness: Theme.of(context).brightness,
                     ),
                     WindowCaptionButton.close(
                       onPressed: ()=>close(),
+                      brightness: Theme.of(context).brightness,
                     ),
                   ],
                 ) : Container()
