@@ -1,13 +1,10 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
-
-
 import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' show showLicensePage;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart' show basename;
 import 'package:process_run/process_run.dart';
@@ -37,7 +34,7 @@ class Task{
     showDialog(
       context: context, 
       builder: (context)=>ContentDialog(
-        title: Text('关于Subs', style: GoogleFonts.notoSansSc(),),
+        title: const Text('关于Subs'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,9 +47,9 @@ class Task{
                 child: Image.asset('assets/icon.png')
               ),
             ),
-            Text(
+            const Text(
               'Subs', 
-              style: GoogleFonts.notoSansSc(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20
               ),
@@ -60,7 +57,7 @@ class Task{
             const SizedBox(height: 10,),
             Text(
               v.version.value,
-              style: GoogleFonts.notoSansSc(
+              style: TextStyle(
                 color: Colors.grey[80],
               ),
             ),
@@ -70,20 +67,20 @@ class Task{
                 final Uri url = Uri.parse('https://github.com/Zhoucheng133/Subs');
                 await launchUrl(url);
               },
-              child: MouseRegion(
+              child: const MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const FaIcon(
+                    FaIcon(
                       FontAwesomeIcons.github,
                       size: 15,
                     ),
-                    const SizedBox(width: 5,),
+                    SizedBox(width: 5,),
                     Text(
                       '本项目地址',
-                      style:  GoogleFonts.notoSansSc(
+                      style:  TextStyle(
                 
                       ),
                     )
@@ -98,22 +95,22 @@ class Task{
                 applicationVersion: 'v${v.version.value}',
                 context: context
               ),
-              child: MouseRegion(
+              child: const MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const FaIcon(
+                    FaIcon(
                       FontAwesomeIcons.certificate,
                       size: 15,
                     ),
-                    const SizedBox(width: 5,),
+                    SizedBox(width: 5,),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
+                      padding: EdgeInsets.only(bottom: 2),
                       child: Text(
                         '许可证',
-                        style: GoogleFonts.notoSansSc(
+                        style: TextStyle(
                           fontSize: 13,
                         ),
                       ),
@@ -126,7 +123,7 @@ class Task{
         ),
         actions: [
           FilledButton(
-            child: Text('好的', style: GoogleFonts.notoSansSc(),), 
+            child: const Text('好的'), 
             onPressed: (){
               Navigator.pop(context);
             }
@@ -152,11 +149,11 @@ class Task{
       await showDialog(
         context: context, 
         builder: (context)=>ContentDialog(
-          title: Text('执行任务失败', style: GoogleFonts.notoSansSc(),),
-          content: Text('没有选择输出目录', style: GoogleFonts.notoSansSc(),),
+          title: const Text('执行任务失败'),
+          content: const Text('没有选择输出目录'),
           actions: [
             FilledButton(
-              child: Text('好的', style: GoogleFonts.notoSansSc(),),
+              child: const Text('好的'),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -169,11 +166,11 @@ class Task{
       await showDialog(
         context: context, 
         builder: (context)=>ContentDialog(
-          title: Text('执行任务失败', style: GoogleFonts.notoSansSc(),),
-          content: Text('视频数量和字幕数量不一致', style: GoogleFonts.notoSansSc(),),
+          title: const Text('执行任务失败'),
+          content: const Text('视频数量和字幕数量不一致'),
           actions: [
             FilledButton(
-              child: Text('好的', style: GoogleFonts.notoSansSc(),),
+              child: const Text('好的'),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -186,11 +183,11 @@ class Task{
       await showDialog(
         context: context, 
         builder: (context)=>ContentDialog(
-          title: Text('执行任务失败', style: GoogleFonts.notoSansSc(),),
-          content: Text('输出路径不能和视频路径相同', style: GoogleFonts.notoSansSc(),),
+          title: const Text('执行任务失败'),
+          content: const Text('输出路径不能和视频路径相同'),
           actions: [
             FilledButton(
-              child: Text('好的', style: GoogleFonts.notoSansSc(),),
+              child: const Text('好的'),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -209,11 +206,11 @@ class Task{
     showDialog(
       context: context, 
       builder: (BuildContext context) => ContentDialog(
-        title: Row(
+        title: const Row(
           children: [
-            const ProgressRing(),
-            const SizedBox(width: 10,),
-            Text("执行中...", style: GoogleFonts.notoSansSc()),
+            ProgressRing(),
+            SizedBox(width: 10,),
+            Text("执行中...", style: TextStyle()),
           ],
         ),
         content: SizedBox(
@@ -222,14 +219,14 @@ class Task{
           child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("共有${v.length.value}个任务，已经完成了${v.finished.value}个", style: GoogleFonts.notoSansSc(),),
+              Text("共有${v.length.value}个任务，已经完成了${v.finished.value}个"),
               const SizedBox(height: 10,),
               Expanded(
                 child: ListView.builder(
                   itemCount: v.log.length,
                   itemBuilder: (context, index)=>Text(
                     v.log[index],
-                    style: GoogleFonts.notoSansSc(),
+                    
                   ),
                 ),
               ),
@@ -242,7 +239,7 @@ class Task{
               v.stopTask.value=true;
               shell.kill();
             },
-            child: Text("取消", style: GoogleFonts.notoSansSc(),),
+            child: const Text("取消"),
           )
         ],
       )
@@ -283,10 +280,10 @@ ${v.ffmpegPath.value} -i "${videoPath}" -vf "ass='${basename(subPath)}'" ${sizeC
         showDialog(
           context: context, 
           builder: (context)=>ContentDialog(
-            title: Text('任务已完成', style: GoogleFonts.notoSansSc(),),
+            title: const Text('任务已完成'),
             actions: [
               FilledButton(
-                child: Text('好的', style: GoogleFonts.notoSansSc(),),
+                child: const Text('好的'),
                 onPressed: (){
                   Navigator.pop(context);
                 }

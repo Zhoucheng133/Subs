@@ -24,11 +24,19 @@ Future<void> main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
   Widget build(BuildContext context) {
+
+    final Brightness brightness = MediaQuery.of(context).platformBrightness;
+
     return FluentApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -40,7 +48,9 @@ class MainApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: FluentThemeData(
-        accentColor: Colors.orange
+        accentColor: Colors.orange,
+        fontFamily: "PuHui",
+        brightness: brightness
       ),
       home: const MainWindow()
     );

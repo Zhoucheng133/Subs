@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' show basename, extension;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,11 +46,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
         await showDialog(
           context: context, 
           builder: (context)=>ContentDialog(
-            title: Text('没有检测到FFmpeg', style: GoogleFonts.notoSansSc(),),
-            content: Text('请检查是否安装了FFmpeg以及是否在环境变量中', style: GoogleFonts.notoSansSc(),),
+            title: const Text('没有检测到FFmpeg'),
+            content: const Text('请检查是否安装了FFmpeg以及是否在环境变量中'),
             actions: [
               Button(
-                child: Text('关闭 Subs', style: GoogleFonts.notoSansSc(),), 
+                child: const Text('关闭 Subs'), 
                 onPressed: ()=>close()
               ),
               FilledButton(
@@ -67,7 +67,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     ffmpegInput.text=v.ffmpegPath.value;
                   });
                 },
-                child: Text('选择FFmpeg路径', style: GoogleFonts.notoSansSc(),)
+                child: const Text('选择FFmpeg路径')
               )
             ],
           )
@@ -202,11 +202,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
       await showDialog(
         context: context, 
         builder: (context)=>ContentDialog(
-          title: Text('扫描失败', style: GoogleFonts.notoSansSc(),),
-          content: Text('没有选择视频目录', style: GoogleFonts.notoSansSc(),),
+          title: const Text('扫描失败'),
+          content: const Text('没有选择视频目录'),
           actions: [
             FilledButton(
-              child: Text('好的', style: GoogleFonts.notoSansSc(),),
+              child: const Text('好的'),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -219,11 +219,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
       await showDialog(
         context: context, 
         builder: (context)=>ContentDialog(
-          title: Text('扫描失败', style: GoogleFonts.notoSansSc(),),
-          content: Text('没有选择字幕目录', style: GoogleFonts.notoSansSc(),),
+          title: const Text('扫描失败'),
+          content: const Text('没有选择字幕目录'),
           actions: [
             FilledButton(
-              child: Text('好的', style: GoogleFonts.notoSansSc(),),
+              child: const Text('好的'),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -242,11 +242,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
       showDialog(
         context: context, 
         builder: (context)=>ContentDialog(
-          title: Text('扫描完成', style: GoogleFonts.notoSansSc(),),
-          content: Text('共找到${videos.length}个视频文件和${subs.length}个字幕文件', style: GoogleFonts.notoSansSc(),),
+          title: const Text('扫描完成'),
+          content: Text('共找到${videos.length}个视频文件和${subs.length}个字幕文件'),
           actions: [
             FilledButton(
-              child: Text('好的', style: GoogleFonts.notoSansSc(),),
+              child: const Text('好的'),
               onPressed: (){
                 Navigator.pop(context);
               }
@@ -273,7 +273,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).brightness==Brightness.dark ? Colors.black:Colors.white,
       child: Column(
         children: [
           SizedBox(
@@ -328,11 +328,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
               children: [
                 Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 100,
                       child: Text(
                         'FFmpeg 路径',
-                        style: GoogleFonts.notoSansSc(
+                        style: TextStyle(
                           fontSize: 15
                         ),
                       ),
@@ -345,7 +345,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     ),
                     const SizedBox(width: 10,),
                     Button(
-                      child: Text('选择', style: GoogleFonts.notoSansSc(),), 
+                      child: const Text('选择'), 
                       onPressed: ()=>pickFFmpeg(),
                     )
                   ],
@@ -353,11 +353,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                 const SizedBox(height: 10,),
                 Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 100,
                       child: Text(
                         '视频目录',
-                        style: GoogleFonts.notoSansSc(
+                        style: TextStyle(
                           fontSize: 15
                         ),
                       ),
@@ -370,7 +370,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     ),
                     const SizedBox(width: 10,),
                     Button(
-                      child: Text('选择', style: GoogleFonts.notoSansSc(),), 
+                      child: const Text('选择'), 
                       onPressed: ()=>pickVideo(),
                     )
                   ],
@@ -378,11 +378,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                 const SizedBox(height: 10,),
                 Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 100,
                       child: Text(
                         '字幕目录',
-                        style: GoogleFonts.notoSansSc(
+                        style: TextStyle(
                           fontSize: 15
                         ),
                       ),
@@ -396,7 +396,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                     const SizedBox(width: 10,),
                     Button(
                       onPressed: samePath ? null : ()=>pickSub(),
-                      child: Text('选择', style: GoogleFonts.notoSansSc(),)
+                      child: const Text('选择')
                     )
                   ],
                 ),
@@ -412,14 +412,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                           });
                           subInput.text=videoInput.text;
                         },
-                        content: Text(
-                          '字幕目录和视频目录相同',
-                          style: GoogleFonts.notoSansSc(),
-                        ),
+                        content: const Text('字幕目录和视频目录相同'),
                       ),
                     ),
                     FilledButton(
-                      child: Text('扫描目录', style: GoogleFonts.notoSansSc(),), 
+                      child: const Text('扫描目录'), 
                       onPressed: ()=>scan(context),
                     )
                   ],
@@ -434,9 +431,8 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                           useSize=val??false;
                         });
                       },
-                      content: Text(
+                      content: const Text(
                         '指定大小',
-                        style: GoogleFonts.notoSansSc(),
                       ),
                     ),
                     const SizedBox(width: 20,),
@@ -486,15 +482,15 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                           useEncoder=val??false;
                         });
                       },
-                      content: Text(
+                      content: const Text(
                         '指定编码',
-                        style: GoogleFonts.notoSansSc(),
+                        
                       ),
                     ),
                     const SizedBox(width: 20,),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Text("视频: ", style: GoogleFonts.notoSansSc()),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Text("视频: ", style: TextStyle()),
                     ),
                     SizedBox(
                       width: 125,
@@ -504,7 +500,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                         items: VideoEncoder.values.map((item)=>ComboBoxItem(
                           enabled: useEncoder,
                           value: item,
-                          child: Text(item.name, style: GoogleFonts.notoSansSc()),
+                          child: Text(item.name, style: const TextStyle()),
                         )).toList(),
                         onChanged: useEncoder ? (item){
                           if(item!=null){
@@ -515,9 +511,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                         } : null,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10, left: 10),
-                      child: Text("音频: ", style: GoogleFonts.notoSansSc()),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 10, left: 10),
+                      child: Text("音频: ", style: TextStyle()),
                     ),
                     SizedBox(
                       width: 125,
@@ -527,7 +523,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                         items: AudioEncoder.values.map((item)=>ComboBoxItem(
                           enabled: useEncoder,
                           value: item,
-                          child: Text(item.name, style: GoogleFonts.notoSansSc()),
+                          child: Text(item.name, style: const TextStyle()),
                         )).toList(),
                         onChanged: useEncoder ? (item){
                           if(item!=null){
@@ -546,10 +542,10 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              child: (videos.isEmpty && subs.isEmpty) ? Center(
+              child: (videos.isEmpty && subs.isEmpty) ? const Center(
                 child: Text(
                   '需要先扫描目录后才能执行任务',
-                  style: GoogleFonts.notoSansSc(
+                  style: TextStyle(
                     fontSize: 15,
                   ),
                 ),
@@ -574,7 +570,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                                     basename(videos[index]),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.notoSansSc(),
+                                    
                                     
                                   ),
                                 )
@@ -600,7 +596,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                                     basename(subs[index]),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.notoSansSc(),
+                                    
                                   ),
                                 )
                               ],
@@ -618,7 +614,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
             child: Row(
               children: [
-                Text('输出目录', style: GoogleFonts.notoSansSc(fontSize: 15),),
+                const Text('输出目录', style: TextStyle(fontSize: 15),),
                 const SizedBox(width: 10,),
                 Expanded(
                   child: TextBox(
@@ -628,13 +624,13 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
                 ),
                 const SizedBox(width: 10,),
                 Button(
-                  child: Text('选择', style: GoogleFonts.notoSansSc(),), 
+                  child: const Text('选择'), 
                   onPressed: ()=>pickOutput()
                 ),
                 const SizedBox(width: 10,),
                 FilledButton(
                   onPressed: (videos.isEmpty && subs.isEmpty) ? null : ()=>task.convert(videos, subs, output.text, context, videoInput.text, subInput.text, useSize, width, height, videoEncoder, audioEncoder),
-                  child: Text('开始任务', style: GoogleFonts.notoSansSc(),)
+                  child: const Text('开始任务')
                 )
               ],
             ),
