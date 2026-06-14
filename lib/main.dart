@@ -1,27 +1,35 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:subs/main_window.dart';
+import 'package:get/get.dart';
+import 'package:subs/lang/zh_cn.dart';
+import 'package:subs/utils/controller.dart';
+import 'package:subs/utils/main_window.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 750),
+  Controller controller=Get.put(Controller());
+  await controller.initLang();
+  WindowOptions windowOptions = WindowOptions(
+    size: Size(800, 600),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.hidden,
-    title: 'Subs',
-    maximumSize: Size(800, 700),
-    minimumSize: Size(800, 700),
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.setResizable(false);
     await windowManager.show();
     await windowManager.focus();
   });
   runApp(const MainApp());
+}
+
+class MainTranslations extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+    'zh_CN': zhCN,
+  };
 }
 
 class MainApp extends StatefulWidget {
@@ -32,27 +40,41 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+
+  final Controller controller=Get.find();
+
   @override
   Widget build(BuildContext context) {
-
     final Brightness brightness = MediaQuery.of(context).platformBrightness;
 
-    return FluentApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('zh', 'CN'),
-      ],
-      debugShowCheckedModeBanner: false,
-      theme: FluentThemeData(
-        accentColor: Colors.orange,
-        fontFamily: "PuHui",
-        brightness: brightness
+    return Obx(()=>
+      GetMaterialApp(
+        translations: MainTranslations(), 
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        locale: controller.lang.value.locale, 
+        supportedLocales: supportedLocales.map((item)=>item.locale).toList(),
+        theme: ThemeData(
+          brightness: brightness,
+          fontFamily: 'PuHui', 
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.red,
+            brightness: brightness,
+          ),
+          textTheme: brightness==Brightness.dark ? ThemeData.dark().textTheme.apply(
+            fontFamily: 'PuHui',
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
+          ) : ThemeData.light().textTheme.apply(
+            fontFamily: 'PuHui',
+          ),
+        ),
+        home: MainWindow()
       ),
-      home: const MainWindow()
     );
   }
 }
