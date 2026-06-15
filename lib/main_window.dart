@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:subs/utils/init.dart';
+import 'package:subs/views/content.dart';
 import 'package:window_manager/window_manager.dart';
 
 class MainWindow extends StatefulWidget {
@@ -16,6 +18,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   void initState() {
     super.initState();
     windowManager.addListener(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      init(context, setState);
+    });
   }
 
  @override
@@ -72,6 +77,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
               ],
             ),
           ),
+          Expanded(child: Content())
         ],
       ),
     );
