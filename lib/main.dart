@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:subs/lang/zh_cn.dart';
 import 'package:subs/utils/controller.dart';
-import 'package:subs/utils/main_window.dart';
+import 'package:subs/main_window.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
