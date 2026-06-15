@@ -6,12 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/utils/controller.dart';
 import 'package:window_manager/window_manager.dart';
 
-Future<void> init(BuildContext context, setState) async {
+Future<void> init(BuildContext context) async {
   final prefs=await SharedPreferences.getInstance();
   Controller controller=Get.find<Controller>();
   String? localFFmpegPath=prefs.getString('ffmpeg');
   if(localFFmpegPath!=null){
-    controller.ffmpegPath.value=localFFmpegPath;
+    controller.ffmpegInput.text=localFFmpegPath;
     return;
   }
   var path = whichSync('ffmpeg');
@@ -20,36 +20,32 @@ Future<void> init(BuildContext context, setState) async {
     await showDialog(
       context: context, 
       builder: (context)=>AlertDialog(
-        title: const Text('没有检测到FFmpeg'),
-        content: const Text('请检查是否安装了FFmpeg以及是否在环境变量中'),
+        title: Text('noFFmpegFound'.tr),
+        content: Text('noFFmpegFoundDescription'.tr),
         actions: [
           TextButton(
-            child: const Text('关闭 Subs'), 
+            child: Text('quit'.tr), 
             onPressed: ()=>windowManager.close(),
           ),
           FilledButton(
             onPressed: () async {
               FilePickerResult? result = await FilePicker.platform.pickFiles();
               if(result!=null){
-                controller.ffmpegPath.value=result.files.single.path!;
+                controller.ffmpegInput.text=result.files.single.path!;
               }
               if(context.mounted){
                 Navigator.pop(context);
               }
-              prefs.setString('ffmpeg', controller.ffmpegPath.value);
-              setState(() {
-                ffmpegInput.text=controller.ffmpegPath.value;
-              });
+              prefs.setString('ffmpeg', controller.ffmpegInput.text);
+              ffmpegInput.text=controller.ffmpegInput.text;
             },
-            child: const Text('选择FFmpeg路径')
+            child: Text('selectFFmpeg'.tr)
           )
         ],
       )
     );
   }else{
-    controller.ffmpegPath.value=path;
-    setState(() {
-      ffmpegInput.text=controller.ffmpegPath.value;
-    });
+    controller.ffmpegInput.text=path;
+    ffmpegInput.text=controller.ffmpegInput.text;
   }
 }

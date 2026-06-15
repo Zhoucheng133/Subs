@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,7 @@ class Controller extends GetxController {
   RxInt length=0.obs;
   RxBool stopTask=false.obs;
   RxList log=[].obs;
-  RxString ffmpegPath=("").obs;
+  TextEditingController ffmpegInput=TextEditingController();
 
   Future<void> initLang() async {
     prefs=await SharedPreferences.getInstance();

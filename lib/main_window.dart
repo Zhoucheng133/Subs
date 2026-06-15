@@ -19,7 +19,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
     super.initState();
     windowManager.addListener(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      init(context, setState);
+      init(context);
     });
   }
 

@@ -34,7 +34,8 @@ String encoderCmd(VideoEncoder videoEncoder, AudioEncoder audioEncoder){
 }
 
 Future<void> convert(
-    List videos, List subs, 
+    List<String> videos, 
+    List<String> subs, 
     String output, 
     BuildContext context, 
     String videoInput, 
@@ -160,7 +161,7 @@ Future<void> convert(
       }
       var command='';
       command='''
-${c.ffmpegPath.value} -i "${videoPath}" -vf "ass='${p.basename(subPath)}'" ${sizeCmd(useSize, width, height)}${encoderCmd(videoEncoder, audioEncoder)} "${savePath.replaceAll("\\", "/")}"
+${c.ffmpegInput.text} -i "${videoPath}" -vf "ass='${p.basename(subPath)}'" ${sizeCmd(useSize, width, height)}${encoderCmd(videoEncoder, audioEncoder)} "${savePath.replaceAll("\\", "/")}"
 ''';
       // print(command);
       controller=ShellLinesController(encoding: utf8);
