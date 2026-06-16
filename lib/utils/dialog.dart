@@ -349,6 +349,7 @@ Future<void> showItemDialog(BuildContext context, String path) async {
           mainAxisSize: .min,
           children: [
             Row(
+              crossAxisAlignment: .start,
               children: [
                 SizedBox(
                   width: 150,
@@ -358,6 +359,7 @@ Future<void> showItemDialog(BuildContext context, String path) async {
               ],
             ),
             Row(
+              crossAxisAlignment: .start,
               children: [
                 SizedBox(
                   width: 150,

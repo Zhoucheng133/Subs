@@ -36,4 +36,5 @@ const Map<String, String> zhCN={
   "fileInfo": "文件信息",
   "fileName": "文件名",
   "filePath": "文件路径",
+  "delete": "删除",
 };

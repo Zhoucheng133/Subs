@@ -18,6 +18,58 @@ class _SubContainerState extends State<SubContainer> {
 
   final Controller controller=Get.find();
 
+  Future<void> showItemMenu(BuildContext context, TapDownDetails details, int index) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final Offset position = overlay.localToGlobal(details.globalPosition);
+    var val=await showMenu(
+      context: context,
+      // 菜单位置
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        position.dx + 50,
+        position.dy + 50,
+      ),
+      items: [
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisSize: .min,
+            children: [
+              Icon(
+                Icons.info_rounded,
+                size: 18,
+              ),
+              const SizedBox(width: 5,),
+              Text('fileInfo'.tr),
+            ],
+          ),
+          height: 40,
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Row(
+            mainAxisSize: .min,
+            children: [
+              Icon(
+                Icons.delete_rounded,
+                size: 18,
+              ),
+              const SizedBox(width: 5,),
+              Text('delete'.tr),
+            ],
+          ),
+          height: 40,
+        ),
+      ]
+    );
+    if(val==1){
+      await showItemDialog(context, controller.subs[index]);
+    }else if(val==2){
+      controller.subs.removeAt(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -88,14 +140,19 @@ class _SubContainerState extends State<SubContainer> {
                   itemBuilder: (BuildContext context, index)=>SizedBox(
                     height: 50,
                     key: ValueKey(controller.subs[index]),
-                    child: ListTile(
-                      onTap: ()=>showItemDialog(context, controller.videos[index]),
-                      title: Text(
-                        p.basename(controller.subs[index]),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
+                    child: GestureDetector(
+                      onSecondaryTapDown: (details){
+                        showItemMenu(context, details, index);
+                      },
+                      child: ListTile(
+                        onTap: ()=>showItemDialog(context, controller.videos[index]),
+                        title: Text(
+                          p.basename(controller.subs[index]),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     ),
