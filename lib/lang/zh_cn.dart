@@ -9,7 +9,7 @@ const Map<String, String> zhCN={
   "videoPath": "视频路径",
   "subtitlePath": "字幕路径",
   "settings": "设置",
-  "encode": "编码",
+  "encoder": "编码",
   "ok": "完成",
   "license": "许可证",
   "prjLink": "本项目地址",

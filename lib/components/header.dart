@@ -17,7 +17,7 @@ class _HeaderState extends State<Header> {
       mainAxisAlignment: .end,
       children: [
         HeaderButtonItem(buttonSide: ButtonSide.left, icon: Icons.settings_rounded, text: "FFmpeg", func: () => ffmpegDialog(context),),
-        HeaderButtonItem(buttonSide: ButtonSide.mid, icon: Icons.tune, text: "encode".tr,),
+        HeaderButtonItem(buttonSide: ButtonSide.mid, icon: Icons.tune, text: "encoder".tr, func: ()=>encoderDialog(context)),
         HeaderButtonItem(buttonSide: ButtonSide.right, icon: Icons.info_rounded, text: "about".tr, func: ()=>showAbout(context),),
       ],
     );

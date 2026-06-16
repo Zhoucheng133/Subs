@@ -176,3 +176,12 @@ Future<void> ffmpegDialog(BuildContext context, { bool onInit = false }) async {
     )
   );
 }
+
+Future<void> encoderDialog(BuildContext context) async { 
+  await showDialog( 
+    context: context,
+    builder: (context)=>AlertDialog(
+      title: Text("encoder".tr),
+    )
+  );
+}
