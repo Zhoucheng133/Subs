@@ -2,6 +2,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as p;
 import 'package:subs/utils/controller.dart';
 import 'package:subs/utils/scanner.dart';
 
@@ -76,9 +77,27 @@ class _SubContainerState extends State<SubContainer> {
                       ),
                     ),
                   ),
-                ) : ListView.builder(
+                ) : ReorderableListView.builder(
+                  onReorder: (oldIndex, newIndex) {
+                    if (newIndex > oldIndex) newIndex -= 1;
+                    final item = controller.subs.removeAt(oldIndex);
+                    controller.subs.insert(newIndex, item);
+                  },
                   itemCount: controller.subs.length,
-                  itemBuilder: (BuildContext context, index)=>Text(controller.subs[index])
+                  itemBuilder: (BuildContext context, index)=>SizedBox(
+                    height: 50,
+                    key: ValueKey(controller.subs[index]),
+                    child: ListTile(
+                      title: Text(
+                        p.basename(controller.subs[index]),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  )
                 )
               ),
             ),

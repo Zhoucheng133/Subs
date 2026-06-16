@@ -30,6 +30,8 @@ Future<List<String>> scanner(BuildContext context, String path, bool forSub) asy
     return [];
   }
 
+  files.sort();
+
   if(forSub){
     controller.subPath.value=path;
     controller.subs.value=files;
