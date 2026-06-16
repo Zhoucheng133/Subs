@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:subs/components/footer.dart';
+import 'package:subs/components/header.dart';
 import 'package:subs/utils/init.dart';
-import 'package:subs/views/content.dart';
 import 'package:window_manager/window_manager.dart';
 
 class MainWindow extends StatefulWidget {
@@ -77,7 +78,18 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
               ],
             ),
           ),
-          Expanded(child: Content())
+          Expanded(
+            child: Padding(
+              padding: .only(left: 20, right: 20, top: 10, bottom: 20),
+              child: Column(
+                children: [
+                  Header(),
+                  Expanded(child: Placeholder()),
+                  Footer()
+                ],
+              ),
+            )
+          )
         ],
       ),
     );

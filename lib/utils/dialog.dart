@@ -37,7 +37,7 @@ Future<void> showAbout(BuildContext context) async {
           Text(
             "v${packageInfo.version}",
             style: TextStyle(
-              color: Colors.grey[80],
+              color: Colors.grey,
             ),
           ),
           const SizedBox(height: 15,),

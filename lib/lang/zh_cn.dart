@@ -14,6 +14,7 @@ const Map<String, String> zhCN={
   "audioEncoder": "音频编码器",
   "outputSize": "输出大小",
   "outputFormat": "输出格式",
+  "outputPath": "输出路径",
   "width": "宽",
   "height": "高",
   "cancel": "取消",

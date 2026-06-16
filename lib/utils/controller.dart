@@ -42,6 +42,7 @@ class Controller extends GetxController {
   TextEditingController ffmpegInput=TextEditingController();
   TextEditingController videoInput=TextEditingController();
   TextEditingController subInput=TextEditingController();
+  TextEditingController outputInput=TextEditingController();
 
   Future<void> initLang() async {
     prefs=await SharedPreferences.getInstance();
@@ -59,6 +60,8 @@ class Controller extends GetxController {
     }else{
       lang.value=supportedLocales[langIndex];
     }
+
+    outputInput.text=prefs.getString('output')??"";
   }
 
   void changeLanguage(int index){
