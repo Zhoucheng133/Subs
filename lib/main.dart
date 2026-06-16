@@ -12,7 +12,7 @@ Future<void> main() async {
   Controller controller=Get.put(Controller());
   await controller.initLang();
   WindowOptions windowOptions = WindowOptions(
-    size: Size(800, 600),
+    size: Size(700, 600),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,

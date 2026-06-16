@@ -6,4 +6,13 @@ const Map<String, String> zhCN={
   "about": "关于",
   "ffmpegPath": "FFmpeg路径",
   "select": "选择",
+  "videoPath": "视频路径",
+  "subtitlePath": "字幕路径",
+  "settings": "设置",
+  "encode": "编码",
+  "ok": "完成",
+  "license": "许可证",
+  "prjLink": "本项目地址",
+  "error": "错误",
+  "ffmpegPathEmpty": "请选择FFmpeg路径",
 };

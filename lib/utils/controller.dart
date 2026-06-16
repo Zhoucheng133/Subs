@@ -30,7 +30,10 @@ class Controller extends GetxController {
   RxInt length=0.obs;
   RxBool stopTask=false.obs;
   RxList log=[].obs;
+
   TextEditingController ffmpegInput=TextEditingController();
+  TextEditingController videoInput=TextEditingController();
+  TextEditingController subInput=TextEditingController();
 
   Future<void> initLang() async {
     prefs=await SharedPreferences.getInstance();

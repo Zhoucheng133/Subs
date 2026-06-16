@@ -1,14 +1,18 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:subs/utils/controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:window_manager/window_manager.dart';
 
 Future<void> showAbout(BuildContext context) async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   await showDialog(
     context: context, 
     builder: (context)=>AlertDialog(
-      title: const Text('关于Subs'),
+      title: Text('${"about".tr} Subs'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +45,7 @@ Future<void> showAbout(BuildContext context) async {
               final Uri url = Uri.parse('https://github.com/Zhoucheng133/Subs');
               await launchUrl(url);
             },
-            child: const MouseRegion(
+            child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -52,12 +56,7 @@ Future<void> showAbout(BuildContext context) async {
                     size: 15,
                   ),
                   SizedBox(width: 5,),
-                  Text(
-                    '本项目地址',
-                    style:  TextStyle(
-              
-                    ),
-                  )
+                  Text('prjLink'.tr)
                 ],
               ),
             ),
@@ -69,7 +68,7 @@ Future<void> showAbout(BuildContext context) async {
               applicationVersion: 'v${packageInfo.version}',
               context: context
             ),
-            child: const MouseRegion(
+            child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +82,7 @@ Future<void> showAbout(BuildContext context) async {
                   Padding(
                     padding: EdgeInsets.only(bottom: 2),
                     child: Text(
-                      '许可证',
+                      'license'.tr,
                       style: TextStyle(
                         fontSize: 13,
                       ),
@@ -96,11 +95,82 @@ Future<void> showAbout(BuildContext context) async {
         ],
       ),
       actions: [
-        FilledButton(
-          child: const Text('好的'), 
+        ElevatedButton(
+          child: Text('ok'.tr), 
           onPressed: (){
             Navigator.pop(context);
           }
+        )
+      ],
+    )
+  );
+}
+
+Future<void> showErrorDialog(BuildContext context, String title, String message) async {
+  await showDialog(
+    context: context, 
+    builder: (context)=>AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        ElevatedButton(
+          child: Text('ok'.tr), 
+          onPressed: ()=>Navigator.pop(context)
+        )
+      ]
+    )
+  );
+}
+
+Future<void> ffmpegDialog(BuildContext context, { bool onInit = false }) async {
+  final controller=Get.find<Controller>();
+  await showDialog(
+    barrierDismissible: !onInit, 
+    context: context, 
+    builder: (context)=>AlertDialog(
+      title: Text("FFmpeg"),
+      content: SizedBox(
+        width: 400,
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller.ffmpegInput,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  isCollapsed: true,
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5)
+                ),
+                readOnly: true,
+              ),
+            ),
+            const SizedBox(width: 10,),
+            FilledButton(
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                if(result!=null){
+                  controller.ffmpegInput.text=result.files.single.path!;
+                }
+              },
+              child: Text('select'.tr),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        if(onInit) TextButton(
+          onPressed: () => windowManager.close(), 
+          child: Text("quit".tr)
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            if(controller.ffmpegInput.text.isEmpty){
+              await showErrorDialog(context, "error".tr, "ffmpegPathEmpty".tr);
+              return;
+            }
+            Navigator.pop(context);
+          }, 
+          child: Text("ok".tr)
         )
       ],
     )
