@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs/utils/controller.dart';
+import 'package:subs/utils/core.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -177,11 +178,161 @@ Future<void> ffmpegDialog(BuildContext context, { bool onInit = false }) async {
   );
 }
 
-Future<void> encoderDialog(BuildContext context) async { 
-  await showDialog( 
+Future<void> encoderDialog(BuildContext context) async {
+  final controller = Get.find<Controller>();
+  await showDialog(
     context: context,
-    builder: (context)=>AlertDialog(
+    builder: (context) => AlertDialog(
       title: Text("encoder".tr),
-    )
+      content: Obx(
+        () => SizedBox(
+          width: 420,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  SizedBox(width: 100, child: Text("videoEncoder".tr)),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: DropdownButtonFormField<VideoEncoder>(
+                      initialValue: controller.videoEncoder.value,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        border: OutlineInputBorder(),
+                      ),
+                      items: VideoEncoder.values.map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e.name),
+                      )).toList(),
+                      onChanged: (v) {
+                        if (v != null) controller.videoEncoder.value = v;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  SizedBox(width: 100, child: Text("audioEncoder".tr)),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: DropdownButtonFormField<AudioEncoder>(
+                      initialValue: controller.audioEncoder.value,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        border: OutlineInputBorder(),
+                      ),
+                      items: AudioEncoder.values.map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e.name),
+                      )).toList(),
+                      onChanged: (v) {
+                        if (v != null) controller.audioEncoder.value = v;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  SizedBox(width: 100, child: Text("outputFormat".tr)),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      initialValue: controller.outputFormat.value,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        border: OutlineInputBorder(),
+                      ),
+                      items: ['mp4', 'mkv', 'avi', 'mov', 'webm'].map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      )).toList(),
+                      onChanged: (v) {
+                        if (v != null) controller.outputFormat.value = v;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  SizedBox(width: 100, child: Text("outputSize".tr)),
+                  Row(
+                    mainAxisAlignment: .start,
+                    children: [
+                      Checkbox(
+                        splashRadius: 0,
+                        value: controller.useSize.value,
+                        onChanged: (v) => controller.useSize.value = v!,
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          controller.useSize.value = !controller.useSize.value;
+                        },
+                        child: Text("specify".tr)
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(width: 100),
+                  Padding(
+                    padding: .only(left: 10),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 70,
+                          child: TextField(
+                            controller: controller.widthInput,
+                            enabled: controller.useSize.value,
+                            decoration: InputDecoration(
+                              isCollapsed: true,
+                              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          child: Text("×"),
+                        ),
+                        SizedBox(
+                          width: 70,
+                          child: TextField(
+                            enabled: controller.useSize.value,
+                            controller: controller.heightInput,
+                            decoration: InputDecoration(
+                              isCollapsed: true,
+                              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text("ok".tr),
+        ),
+      ],
+    ),
   );
 }

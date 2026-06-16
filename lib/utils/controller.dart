@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:subs/utils/core.dart';
 
 class LanguageType{
   String name;
@@ -30,6 +31,13 @@ class Controller extends GetxController {
   RxInt length=0.obs;
   RxBool stopTask=false.obs;
   RxList log=[].obs;
+
+  Rx<VideoEncoder> videoEncoder = Rx(VideoEncoder.libx264);
+  Rx<AudioEncoder> audioEncoder = Rx(AudioEncoder.aac);
+  RxBool useSize = false.obs;
+  TextEditingController widthInput = TextEditingController(text: '1920');
+  TextEditingController heightInput = TextEditingController(text: '1080');
+  RxString outputFormat = 'mp4'.obs;
 
   TextEditingController ffmpegInput=TextEditingController();
   TextEditingController videoInput=TextEditingController();
