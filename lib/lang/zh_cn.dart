@@ -24,4 +24,7 @@ const Map<String, String> zhCN={
   "prjLink": "本项目地址",
   "error": "错误",
   "ffmpegPathEmpty": "请选择FFmpeg路径",
+  "videoList": "视频列表",
+  "subtitleList": "字幕列表",
+  "run": "运行",
 };

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:subs/components/content.dart';
 import 'package:subs/components/footer.dart';
 import 'package:subs/components/header.dart';
 import 'package:subs/utils/init.dart';
@@ -84,7 +85,12 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
               child: Column(
                 children: [
                   Header(),
-                  Expanded(child: Placeholder()),
+                  Expanded(
+                    child: Padding(
+                      padding: .symmetric(vertical: 5),
+                      child: Content(),
+                    )
+                  ),
                   Footer()
                 ],
               ),

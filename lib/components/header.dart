@@ -14,8 +14,9 @@ class _HeaderState extends State<Header> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: .end,
       children: [
+        HeaderButtonItem(buttonSide: ButtonSide.both, icon: Icons.play_arrow_rounded, text: "run".tr, func: () => {},),
+        Expanded(child: Container()),
         HeaderButtonItem(buttonSide: ButtonSide.left, icon: Icons.settings_rounded, text: "FFmpeg", func: () => ffmpegDialog(context),),
         HeaderButtonItem(buttonSide: ButtonSide.mid, icon: Icons.tune, text: "encoder".tr, func: ()=>encoderDialog(context)),
         HeaderButtonItem(buttonSide: ButtonSide.right, icon: Icons.info_rounded, text: "about".tr, func: ()=>showAbout(context),),
