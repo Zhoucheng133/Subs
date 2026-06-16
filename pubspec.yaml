@@ -20,6 +20,7 @@ dependencies:
   get: ^4.6.6
   font_awesome_flutter: ^10.7.0
   package_info_plus: ^8.3.0
+  desktop_drop: ^0.7.1
 
 dev_dependencies:
   flutter_test:
