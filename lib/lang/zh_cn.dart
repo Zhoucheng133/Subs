@@ -32,5 +32,8 @@ const Map<String, String> zhCN={
   "tipDrop": "也可以拖拽目录到此处",
   "noMatch": "没有匹配项",
   "sameAsSubsPath": "与字幕路径相同",
-  "sameAsVideoPath": "与视频路径相同"
+  "sameAsVideoPath": "与视频路径相同",
+  "fileInfo": "文件信息",
+  "fileName": "文件名",
+  "filePath": "文件路径",
 };

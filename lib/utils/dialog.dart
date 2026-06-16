@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart' as p;
 import 'package:subs/utils/controller.dart';
 import 'package:subs/utils/core.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -334,5 +335,46 @@ Future<void> encoderDialog(BuildContext context) async {
         ),
       ],
     ),
+  );
+}
+
+Future<void> showItemDialog(BuildContext context, String path) async {
+  await showDialog(
+    context: context, 
+    builder: (context)=>AlertDialog(
+      title: Text("fileInfo".tr),
+      content: SizedBox(
+        width: 400,
+        child: Column(
+          mainAxisSize: .min,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: Text("fileName".tr)
+                ),
+                Expanded(child: Text(p.basename(path)))
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: Text("filePath".tr)
+                ),
+                Expanded(child: Text(path))
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: ()=>Navigator.pop(context), 
+          child: Text("ok".tr)
+        )
+      ],
+    )
   );
 }

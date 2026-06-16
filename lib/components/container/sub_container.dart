@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:subs/utils/controller.dart';
+import 'package:subs/utils/dialog.dart';
 import 'package:subs/utils/scanner.dart';
 
 class SubContainer extends StatefulWidget {
@@ -88,6 +89,7 @@ class _SubContainerState extends State<SubContainer> {
                     height: 50,
                     key: ValueKey(controller.subs[index]),
                     child: ListTile(
+                      onTap: ()=>showItemDialog(context, controller.videos[index]),
                       title: Text(
                         p.basename(controller.subs[index]),
                         maxLines: 2,
