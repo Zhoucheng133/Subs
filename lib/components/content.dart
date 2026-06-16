@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:subs/components/container/sub_container.dart';
+import 'package:subs/components/container/video_container.dart';
+import 'package:subs/utils/controller.dart';
 
 class Content extends StatefulWidget {
   const Content({super.key});
@@ -9,6 +12,9 @@ class Content extends StatefulWidget {
 }
 
 class _ContentState extends State<Content> {
+
+  final Controller controller=Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,57 +22,11 @@ class _ContentState extends State<Content> {
       child: Row(
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(
-                  "videoList".tr,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: .only(top: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).brightness==Brightness.light ? Colors.white : Colors.white.withAlpha(20),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )
+            child: VideoContainer()
           ),
           const SizedBox(width: 15,),
           Expanded(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(
-                  "subtitleList".tr,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: .only(top: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).brightness==Brightness.light ? Colors.white : Colors.white.withAlpha(20),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )
+            child: SubContainer()
           ),
         ],
       ),

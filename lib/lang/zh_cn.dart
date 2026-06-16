@@ -27,4 +27,10 @@ const Map<String, String> zhCN={
   "videoList": "视频列表",
   "subtitleList": "字幕列表",
   "run": "运行",
+  "selectVideoPath": "选择视频路径",
+  "selectSubtitlePath": "选择字幕路径",
+  "tipDrop": "也可以拖拽目录到此处",
+  "noMatch": "没有匹配项",
+  "sameAsSubsPath": "与字幕路径相同",
+  "sameAsVideoPath": "与视频路径相同"
 };

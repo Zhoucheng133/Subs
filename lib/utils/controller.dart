@@ -40,9 +40,12 @@ class Controller extends GetxController {
   RxString outputFormat = 'mp4'.obs;
 
   TextEditingController ffmpegInput=TextEditingController();
-  TextEditingController videoInput=TextEditingController();
-  TextEditingController subInput=TextEditingController();
   TextEditingController outputInput=TextEditingController();
+
+  RxString videoPath="".obs;
+  RxString subPath="".obs;
+  RxList<String> videos=RxList([]);
+  RxList<String> subs=RxList([]);
 
   Future<void> initLang() async {
     prefs=await SharedPreferences.getInstance();
