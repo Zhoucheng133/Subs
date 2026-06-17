@@ -122,11 +122,15 @@ class Controller extends GetxController {
     showDialog(
       context: context, 
       builder: (BuildContext context) => AlertDialog(
-        title: const Row(
+        title: Row(
           children: [
-            CircularProgressIndicator(),
-            SizedBox(width: 10,),
-            Text("执行中...", style: TextStyle()),
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: const CircularProgressIndicator()
+            ),
+            const SizedBox(width: 10,),
+            Text("executing".tr, style: TextStyle()),
           ],
         ),
         content: SizedBox(
@@ -135,7 +139,10 @@ class Controller extends GetxController {
           child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("共有${length.value}个任务，已经完成了${finished.value}个"),
+              Text("taskProgress".trParams({
+                'length': length.value.toString(), 
+                'finished': finished.value.toString()
+              })),
               const SizedBox(height: 10,),
               Expanded(
                 child: ListView.builder(
@@ -155,7 +162,7 @@ class Controller extends GetxController {
               stopTask.value=true;
               shell.kill();
             },
-            child: const Text("取消"),
+            child: Text("cancel".tr),
           )
         ],
       )
@@ -196,10 +203,10 @@ ${p.join(p.dirname(Platform.resolvedExecutable), Platform.isWindows ? "ffmpeg.ex
         showDialog(
           context: context, 
           builder: (context)=>AlertDialog(
-            title: const Text('任务已完成'),
+            title: Text('taskComplete'.tr),
             actions: [
               FilledButton(
-                child: const Text('好的'),
+                child: Text('ok'.tr),
                 onPressed: (){
                   Navigator.pop(context);
                 }

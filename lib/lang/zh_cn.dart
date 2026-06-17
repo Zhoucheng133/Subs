@@ -42,4 +42,7 @@ const Map<String, String> zhCN={
   "videos": "视频",
   "subs": "字幕",
   "videoAndOutputSame": "视频和输出路径相同",
+  "executing": "执行中...",
+  "taskProgress": "共有@length个任务，已经完成了@finished个",
+  "taskComplete": "任务已完成",
 };
