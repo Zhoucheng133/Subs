@@ -76,7 +76,7 @@ class _VideoContainerState extends State<VideoContainer> {
       crossAxisAlignment: .start,
       children: [
         Text(
-          "videoList".tr,
+          "${'videoList'.tr}: ${controller.videos.length}",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,

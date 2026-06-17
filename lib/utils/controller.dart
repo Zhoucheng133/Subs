@@ -84,17 +84,14 @@ class Controller extends GetxController {
   }
 
   run(BuildContext context) async {
-    Shell shell=Shell();
-    final version=await shell.run('${p.join(p.dirname(Platform.resolvedExecutable), "ffmpeg")} -version');
-    showDialog(context: context, builder: (context)=>AlertDialog(
-      title: Text("version".tr),
-      content: Text(version.first.outText),
-      actions: [
-        ElevatedButton(
-          child: Text("ok".tr),
-          onPressed: ()=>Navigator.pop(context)
-        )
-      ]
-    ));
+    if(videos.length == 0 || subs.length == 0){
+      await showErrorDialog(context, 'error'.tr, 'videoOrSubEmpty'.tr);
+      return;
+    }
+
+    if(videos.length!=subs.length){
+      await showErrorDialog(context, 'error'.tr, "${'videoSubNotMatch'.tr}\n${videos.length} ${'videos'.tr} : ${subs.length} ${'subs'.tr}");
+      return;
+    }
   }
 }

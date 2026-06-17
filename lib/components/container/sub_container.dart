@@ -76,7 +76,7 @@ class _SubContainerState extends State<SubContainer> {
       crossAxisAlignment: .start,
       children: [
         Text(
-          "subtitleList".tr,
+          "${'subtitleList'.tr}: ${controller.subs.length}",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,

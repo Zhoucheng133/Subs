@@ -1,11 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
+import 'package:process_run/process_run.dart';
 import 'package:subs/utils/controller.dart';
 import 'package:subs/utils/core.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+void showFFmpegInfo(BuildContext context) async {
+  Shell shell=Shell();
+  final version=await shell.run('${p.join(p.dirname(Platform.resolvedExecutable), Platform.isWindows ? "ffmpeg.exe" : "ffmpeg")} -version');
+  showDialog(context: context, builder: (context)=>AlertDialog(
+    title: Text("FFmpeg"),
+    content: Text(version.first.outText),
+    actions: [
+      ElevatedButton(
+        child: Text("ok".tr),
+        onPressed: ()=>Navigator.pop(context)
+      )
+    ]
+  ));
+}
 
 Future<void> showAbout(BuildContext context) async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -63,6 +81,33 @@ Future<void> showAbout(BuildContext context) async {
           ),
           const SizedBox(height: 10),
           GestureDetector(
+            onTap: ()=>showFFmpegInfo(context),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.code,
+                    size: 15,
+                  ),
+                  SizedBox(width: 5,),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 2),
+                    child: Text(
+                      "FFmpeg",
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          GestureDetector(
             onTap: ()=>showLicensePage(
               applicationName: 'Subs',
               applicationVersion: 'v${packageInfo.version}',
@@ -91,7 +136,7 @@ Future<void> showAbout(BuildContext context) async {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
       actions: [
