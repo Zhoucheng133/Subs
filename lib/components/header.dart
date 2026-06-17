@@ -21,8 +21,7 @@ class _HeaderState extends State<Header> {
       children: [
         HeaderButtonItem(buttonSide: ButtonSide.both, icon: Icons.play_arrow_rounded, text: "run".tr, func: () => controller.run(context),),
         Expanded(child: Container()),
-        HeaderButtonItem(buttonSide: ButtonSide.left, icon: Icons.settings_rounded, text: "FFmpeg", func: () => ffmpegDialog(context),),
-        HeaderButtonItem(buttonSide: ButtonSide.mid, icon: Icons.tune, text: "encoder".tr, func: ()=>encoderDialog(context)),
+        HeaderButtonItem(buttonSide: ButtonSide.left, icon: Icons.tune, text: "encoder".tr, func: ()=>encoderDialog(context)),
         HeaderButtonItem(buttonSide: ButtonSide.right, icon: Icons.info_rounded, text: "about".tr, func: ()=>showAbout(context),),
       ],
     );

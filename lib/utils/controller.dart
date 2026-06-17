@@ -41,7 +41,6 @@ class Controller extends GetxController {
   TextEditingController heightInput = TextEditingController(text: '1080');
   RxString outputFormat = 'mp4'.obs;
 
-  TextEditingController ffmpegInput=TextEditingController();
   TextEditingController outputInput=TextEditingController();
 
   RxString videoPath="".obs;

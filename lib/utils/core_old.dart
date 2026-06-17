@@ -145,7 +145,7 @@ Future<void> convert(
       }
       var command = '';
       command = '''
-${c.ffmpegInput.text} -i "${videoPath}" -vf "ass='${p.basename(subPath)}'" ${sizeCmd(c.useSize.value, int.tryParse(c.widthInput.text) ?? 1920, int.tryParse(c.heightInput.text) ?? 1080)}${encoderCmd(c.videoEncoder.value, c.audioEncoder.value)} "${savePath.replaceAll("\\", "/")}"
+ffmpeg -i "${videoPath}" -vf "ass='${p.basename(subPath)}'" ${sizeCmd(c.useSize.value, int.tryParse(c.widthInput.text) ?? 1920, int.tryParse(c.heightInput.text) ?? 1080)}${encoderCmd(c.videoEncoder.value, c.audioEncoder.value)} "${savePath.replaceAll("\\", "/")}"
 ''';
       // print(command);
       controller=ShellLinesController(encoding: utf8);

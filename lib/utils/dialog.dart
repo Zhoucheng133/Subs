@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,6 @@ import 'package:path/path.dart' as p;
 import 'package:subs/utils/controller.dart';
 import 'package:subs/utils/core.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:window_manager/window_manager.dart';
 
 Future<void> showAbout(BuildContext context) async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -120,61 +118,6 @@ Future<void> showErrorDialog(BuildContext context, String title, String message)
           onPressed: ()=>Navigator.pop(context)
         )
       ]
-    )
-  );
-}
-
-Future<void> ffmpegDialog(BuildContext context, { bool onInit = false }) async {
-  final controller=Get.find<Controller>();
-  await showDialog(
-    barrierDismissible: !onInit, 
-    context: context, 
-    builder: (context)=>AlertDialog(
-      title: Text("FFmpeg"),
-      content: SizedBox(
-        width: 400,
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller.ffmpegInput,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5)
-                ),
-                readOnly: true,
-              ),
-            ),
-            const SizedBox(width: 10,),
-            FilledButton(
-              onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
-                if(result!=null){
-                  controller.ffmpegInput.text=result.files.single.path!;
-                }
-              },
-              child: Text('select'.tr),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        if(onInit) TextButton(
-          onPressed: () => windowManager.close(), 
-          child: Text("quit".tr)
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            if(controller.ffmpegInput.text.isEmpty){
-              await showErrorDialog(context, "error".tr, "ffmpegPathEmpty".tr);
-              return;
-            }
-            Navigator.pop(context);
-          }, 
-          child: Text("ok".tr)
-        )
-      ],
     )
   );
 }
