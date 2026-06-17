@@ -75,12 +75,14 @@ class _SubContainerState extends State<SubContainer> {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Text(
-          "${'subtitleList'.tr}: ${controller.subs.length}",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary
+        Obx(
+          () => Text(
+            "${'subtitleList'.tr}: ${controller.subs.length}",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary
+            ),
           ),
         ),
         Expanded(
@@ -145,7 +147,7 @@ class _SubContainerState extends State<SubContainer> {
                         showItemMenu(context, details, index);
                       },
                       child: ListTile(
-                        onTap: ()=>showItemDialog(context, controller.videos[index]),
+                        onTap: ()=>showItemDialog(context, controller.subs[index]),
                         title: Text(
                           p.basename(controller.subs[index]),
                           maxLines: 2,

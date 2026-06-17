@@ -75,12 +75,14 @@ class _VideoContainerState extends State<VideoContainer> {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Text(
-          "${'videoList'.tr}: ${controller.videos.length}",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary
+        Obx(
+          () => Text(
+            "${'videoList'.tr}: ${controller.videos.length}",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary
+            ),
           ),
         ),
         Expanded(
