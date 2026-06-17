@@ -122,7 +122,7 @@ class _SubContainerState extends State<SubContainer> {
                           ),
                           TextButton(
                             onPressed: controller.videoPath.value.isEmpty ? null : () async {
-                              await scanner(context, controller.subPath.value, true);
+                              await scanner(context, controller.videoPath.value, true);
                             },
                             child: Text("sameAsVideoPath".tr)
                           )
