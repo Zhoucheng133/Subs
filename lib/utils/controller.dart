@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as p;
+import 'package:process_run/process_run.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/utils/core.dart';
 import 'package:subs/utils/dialog.dart';
@@ -81,12 +83,18 @@ class Controller extends GetxController {
     }
   }
 
-  run(BuildContext context){
-    // TODO 测试
-    print(Platform.resolvedExecutable);
-    if(videos.length==0 || subs.length==0){
-      showErrorDialog(context, "error".tr, "videoOrSubEmpty".tr);
-      return;
-    }
+  run(BuildContext context) async {
+    Shell shell=Shell();
+    final version=await shell.run('${p.join(p.dirname(Platform.resolvedExecutable), "ffmpeg")} -version');
+    showDialog(context: context, builder: (context)=>AlertDialog(
+      title: Text("version".tr),
+      content: Text(version.first.outText),
+      actions: [
+        ElevatedButton(
+          child: Text("ok".tr),
+          onPressed: ()=>Navigator.pop(context)
+        )
+      ]
+    ));
   }
 }
