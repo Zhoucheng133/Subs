@@ -180,7 +180,6 @@ class Controller extends GetxController {
       command = '''
 ${p.join(p.dirname(Platform.resolvedExecutable), Platform.isWindows ? "ffmpeg.exe" : "ffmpeg")} -i "${video}" -vf "ass='${p.basename(sub)}'" ${sizeCmd(useSize.value, int.tryParse(widthInput.text) ?? 1920, int.tryParse(heightInput.text) ?? 1080)}${encoderCmd(videoEncoder.value, audioEncoder.value)} "${savePath.replaceAll("\\", "/")}"
 ''';
-      print(command);
       controller=ShellLinesController(encoding: utf8);
       shell=Shell(workingDirectory: subPath.value, stdout: controller.sink, stderr: controller.sink);
       try {
