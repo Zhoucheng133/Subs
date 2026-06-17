@@ -37,4 +37,5 @@ const Map<String, String> zhCN={
   "fileName": "文件名",
   "filePath": "文件路径",
   "delete": "删除",
+  "videoOrSubEmpty": "视频或字幕为空",
 };

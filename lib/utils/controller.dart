@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subs/utils/core.dart';
+import 'package:subs/utils/dialog.dart';
 
 class LanguageType{
   String name;
@@ -77,6 +79,15 @@ class Controller extends GetxController {
   void darkModeHandler(bool dark){
     if(autoDark.value){
       darkMode.value=dark;
+    }
+  }
+
+  run(BuildContext context){
+    // TODO 测试
+    print(Platform.resolvedExecutable);
+    if(videos.length==0 || subs.length==0){
+      showErrorDialog(context, "error".tr, "videoOrSubEmpty".tr);
+      return;
     }
   }
 }
