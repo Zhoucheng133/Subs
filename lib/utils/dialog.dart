@@ -7,7 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/process_run.dart';
 import 'package:subs/utils/controller.dart';
-import 'package:subs/utils/core.dart';
+import 'package:subs/utils/types.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void showFFmpegInfo(BuildContext context) async {

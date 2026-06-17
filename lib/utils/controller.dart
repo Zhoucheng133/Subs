@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -6,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/process_run.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:subs/utils/core.dart';
+import 'package:subs/utils/types.dart';
 import 'package:subs/utils/dialog.dart';
 
 class LanguageType{
@@ -83,6 +84,20 @@ class Controller extends GetxController {
     }
   }
 
+  String sizeCmd(bool useSize, int width, int height){
+    if(useSize){
+      return "-s ${width}x${height} ";
+    }
+    return "";
+  }
+
+  String encoderCmd(VideoEncoder videoEncoder, AudioEncoder audioEncoder){
+    if(videoEncoder==VideoEncoder.av1){
+      return "-c:v libaom-av1 -c:a ${audioEncoder.name}";
+    }
+    return "-c:v ${videoEncoder.name} -c:a ${audioEncoder.name}";
+  }
+
   run(BuildContext context) async {
     if(videos.length == 0 || subs.length == 0){
       await showErrorDialog(context, 'error'.tr, 'videoOrSubEmpty'.tr);
@@ -92,6 +107,107 @@ class Controller extends GetxController {
     if(videos.length!=subs.length){
       await showErrorDialog(context, 'error'.tr, "${'videoSubNotMatch'.tr}\n${videos.length} ${'videos'.tr} : ${subs.length} ${'subs'.tr}");
       return;
+    }
+    if(videoPath.value == outputInput.text){
+      await showErrorDialog(context, 'error'.tr, 'videoAndOutputSame'.tr);
+      return;
+    }
+    late Shell shell;
+    late ShellLinesController controller;
+
+    finished.value=0;
+    stopTask.value=false;
+    length.value=videos.length;
+
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => AlertDialog(
+        title: const Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 10,),
+            Text("执行中...", style: TextStyle()),
+          ],
+        ),
+        content: SizedBox(
+          height: 300,
+          width: 500,
+          child: Obx(() => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("共有${length.value}个任务，已经完成了${finished.value}个"),
+              const SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: log.length,
+                  itemBuilder: (context, index)=>Text(
+                    log[index],
+                    
+                  ),
+                ),
+              ),
+            ],
+          )),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              stopTask.value=true;
+              shell.kill();
+            },
+            child: const Text("取消"),
+          )
+        ],
+      )
+    );
+
+    for(var i=0; i<videos.length; i++){
+      log.value=[];
+      String video=videos[i];
+      String sub=subs[i];
+      String savePath = p.join(outputInput.text, "${p.basenameWithoutExtension(video)}.${outputFormat.value}");
+      if(stopTask.value){
+        break;
+      }
+      var command = '';
+      command = '''
+${p.join(p.dirname(Platform.resolvedExecutable), Platform.isWindows ? "ffmpeg.exe" : "ffmpeg")} -i "${video}" -vf "ass='${p.basename(sub)}'" ${sizeCmd(useSize.value, int.tryParse(widthInput.text) ?? 1920, int.tryParse(heightInput.text) ?? 1080)}${encoderCmd(videoEncoder.value, audioEncoder.value)} "${savePath.replaceAll("\\", "/")}"
+''';
+      print(command);
+      controller=ShellLinesController(encoding: utf8);
+      shell=Shell(workingDirectory: subPath.value, stdout: controller.sink, stderr: controller.sink);
+      try {
+        controller.stream.listen((event){
+          if(log.length>=50){
+            log.removeAt(0);
+          }
+          log.insert(0, event);
+        });
+        await shell.run(command);
+      } on ShellException catch (_){
+      }
+      if(!stopTask.value){
+        finished.value=finished.value+1;
+      }
+    }
+    if(context.mounted){
+      Navigator.pop(context);
+      if(!stopTask.value){
+        showDialog(
+          context: context, 
+          builder: (context)=>AlertDialog(
+            title: const Text('任务已完成'),
+            actions: [
+              FilledButton(
+                child: const Text('好的'),
+                onPressed: (){
+                  Navigator.pop(context);
+                }
+              )
+            ],
+          )
+        );
+      }
     }
   }
 }

@@ -41,4 +41,5 @@ const Map<String, String> zhCN={
   "videoSubNotMatch": "视频和字幕不匹配",
   "videos": "视频",
   "subs": "字幕",
+  "videoAndOutputSame": "视频和输出路径相同",
 };
