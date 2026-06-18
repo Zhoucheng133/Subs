@@ -1,10 +1,5 @@
 const Map<String, String> en_US = {
-  "noFFmpegFound": "FFmpeg Not Found",
-  "noFFmpegFoundDescription": "Please check if FFmpeg is installed and added to your environment variables",
-  "quit": "Quit Subs",
-  "selectFFmpeg": "Select FFmpeg Path",
   "about": "About",
-  "ffmpegPath": "FFmpeg Path",
   "select": "Select",
   "videoPath": "Video Path",
   "subtitlePath": "Subtitle Path",

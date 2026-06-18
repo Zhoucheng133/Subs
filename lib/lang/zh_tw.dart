@@ -1,10 +1,5 @@
 const Map<String, String> zhTW = {
-  "noFFmpegFound": "未偵測到FFmpeg",
-  "noFFmpegFoundDescription": "請檢查是否已安裝FFmpeg及是否已加入環境變數",
-  "quit": "關閉 Subs",
-  "selectFFmpeg": "選擇FFmpeg路徑",
   "about": "關於",
-  "ffmpegPath": "FFmpeg路徑",
   "select": "選擇",
   "videoPath": "影片路徑",
   "subtitlePath": "字幕路徑",
