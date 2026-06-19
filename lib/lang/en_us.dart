@@ -40,5 +40,6 @@ const Map<String, String> en_US = {
   "executing": "Executing...",
   "taskProgress": "@finished of @length tasks completed",
   "taskComplete": "All tasks completed",
-  "language": "Language"
+  "language": "Language",
+  "outputEmpty": "Output path is empty",
 };

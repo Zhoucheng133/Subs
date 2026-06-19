@@ -103,7 +103,10 @@ class Controller extends GetxController {
       await showErrorDialog(context, 'error'.tr, 'videoOrSubEmpty'.tr);
       return;
     }
-
+    if(outputInput.text==""){
+      await showErrorDialog(context, 'error'.tr, 'outputEmpty'.tr);
+      return;
+    }
     if(videos.length!=subs.length){
       await showErrorDialog(context, 'error'.tr, "${'videoSubNotMatch'.tr}\n${videos.length} ${'videos'.tr} : ${subs.length} ${'subs'.tr}");
       return;

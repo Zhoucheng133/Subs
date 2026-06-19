@@ -40,5 +40,6 @@ const Map<String, String> zhCN={
   "executing": "执行中...",
   "taskProgress": "共有@length个任务，已经完成了@finished个",
   "taskComplete": "任务已完成",
-  "language": "语言"
+  "language": "语言",
+  "outputEmpty": "输出路径为空",
 };
