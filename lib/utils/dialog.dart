@@ -375,9 +375,9 @@ Future<void> selectLanguage(BuildContext context) async {
     context: context, 
     builder: (context)=>AlertDialog(
       title: Text('language'.tr),
-      content: StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState)=> DropdownButtonHideUnderline(
-          child: DropdownButton(
+      content: DropdownButtonHideUnderline(
+        child: Obx(
+          ()=> DropdownButton(
             focusColor: Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             padding: const EdgeInsets.symmetric(horizontal: 10),
