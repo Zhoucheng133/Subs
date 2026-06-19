@@ -40,4 +40,5 @@ const Map<String, String> zhTW = {
   "executing": "執行中...",
   "taskProgress": "共有@length個任務，已完成@finished個",
   "taskComplete": "任務已完成",
+  "language": "語言"
 };
