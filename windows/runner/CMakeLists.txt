@@ -40,13 +40,23 @@ target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 add_dependencies(${BINARY_NAME} flutter_assemble)
 
 set(FFMPEG_SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../ffmpeg.exe")
+set(DLL_SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../libconverter.dll")
 
 add_custom_command(
     TARGET ${BINARY_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "${FFMPEG_SOURCE_PATH}"
-    "$<TARGET_FILE_DIR:${BINARY_NAME}>/ffmpeg.exe"
+        "${FFMPEG_SOURCE_PATH}"
+        "$<TARGET_FILE_DIR:${BINARY_NAME}>/ffmpeg.exe"
     COMMENT "复制 ffmpeg.exe"
 )
 
+add_custom_command(
+    TARGET ${BINARY_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${DLL_SOURCE_PATH}"
+        "$<TARGET_FILE_DIR:${BINARY_NAME}>/libconverter.dll"
+    COMMENT "复制 libconverter.dll"
+)
+
 install(FILES "${FFMPEG_SOURCE_PATH}" DESTINATION "${CMAKE_INSTALL_PREFIX}")
+install(FILES "${DLL_SOURCE_PATH}" DESTINATION "${CMAKE_INSTALL_PREFIX}")
