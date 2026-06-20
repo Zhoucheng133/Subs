@@ -17,9 +17,6 @@ Also available in English. Click [HERE](/documents/en.md) to view the English ve
 
 ## 使用方法
 
-> [!WARNING]
-> 如果字幕文件不是utf-8编码，可能会导致失败，你可以使用本仓库的`tools/convert.py`进行转换
-
 1. 将视频和字幕分别放在两个文件夹，放在一起也行
 2. 需要字幕文件数量和视频文件数量相同后才能运行（你可以在添加完成之后自行删除/调整顺序）
 3. 打开本软件，选择视频文件夹和字幕文件夹或者拖入对应区域
