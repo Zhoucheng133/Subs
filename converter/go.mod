@@ -1,3 +1,8 @@
-module converter
+module convert
 
 go 1.25.4
+
+require (
+	golang.org/x/net v0.56.0
+	golang.org/x/text v0.38.0 // indirect
+)
