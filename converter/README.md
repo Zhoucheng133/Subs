@@ -8,8 +8,8 @@ Use the follwing command to generate dynamic library
 
 ```bash
 # For macOS
-go build -buildmode=c-shared -ldflags="-s -w" -o build/core.dylib
+go build -buildmode=c-shared -ldflags="-s -w" -o build/libconverter.dylib
 
 # For Windows
-go build -buildmode=c-shared -ldflags="-s -w" -o build/core.dll
+go build -buildmode=c-shared -ldflags="-s -w" -o build/libconverter.dll
 ```
