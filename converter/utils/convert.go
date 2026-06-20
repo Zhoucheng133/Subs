@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -12,7 +11,6 @@ import (
 )
 
 func Convert(dirPath string) error {
-
 	backupDir := filepath.Join(dirPath, "backup")
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
@@ -36,21 +34,26 @@ func Convert(dirPath string) error {
 			return err
 		}
 		enc, encName, _ := charset.DetermineEncoding(content, "text/plain")
-		if strings.ToLower(encName) == "utf-8" {
-			isBOM := bytes.HasPrefix(content, bomPrefix)
-			if !isBOM {
-				continue
+		isBOM := bytes.HasPrefix(content, bomPrefix)
+		if strings.ToLower(encName) == "utf-8" && !isBOM {
+			continue
+		}
+
+		var utf8Content []byte
+
+		if isBOM {
+			utf8Content = content[3:]
+		} else {
+			reader := enc.NewDecoder().Reader(bytes.NewReader(content))
+			utf8Content, err = io.ReadAll(reader)
+			if err != nil {
+				return err
 			}
 		}
 		if err := os.MkdirAll(backupDir, 0755); err != nil {
 			return err
 		}
-		reader := enc.NewDecoder().Reader(bytes.NewReader(content))
-		utf8Content, err := io.ReadAll(reader)
-		if err != nil {
-			fmt.Printf("Decode file [%s] error: %v\n", entry.Name(), err)
-			continue
-		}
+
 		backupPath := filepath.Join(backupDir, entry.Name())
 		_ = os.Remove(backupPath)
 		err = os.Rename(filePath, backupPath)
