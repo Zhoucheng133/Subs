@@ -3,6 +3,7 @@ package main
 import "C"
 import "convert/utils"
 
+//export Convert
 func Convert(dir *C.char) *C.char {
 	err := utils.Convert(C.GoString(dir))
 	if err != nil {
