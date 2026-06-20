@@ -42,4 +42,5 @@ const Map<String, String> zhTW = {
   "taskComplete": "任務已完成",
   "language": "語言",
   "outputEmpty": "輸出路徑為空",
+  "clear": "清空",
 };

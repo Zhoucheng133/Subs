@@ -42,4 +42,5 @@ const Map<String, String> en_US = {
   "taskComplete": "All tasks completed",
   "language": "Language",
   "outputEmpty": "Output path is empty",
+  "clear": "Clear",
 };

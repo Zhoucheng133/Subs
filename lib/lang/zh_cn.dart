@@ -42,4 +42,5 @@ const Map<String, String> zhCN={
   "taskComplete": "任务已完成",
   "language": "语言",
   "outputEmpty": "输出路径为空",
+  "clear": "清空",
 };

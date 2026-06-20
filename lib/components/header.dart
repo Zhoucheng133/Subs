@@ -16,6 +16,13 @@ class _HeaderState extends State<Header> {
 
   final controller = Get.find<Controller>();
 
+  void clear(){
+    controller.videos.clear();
+    controller.subs.clear();
+    controller.videoPath.value="";
+    controller.subPath.value="";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,6 +30,7 @@ class _HeaderState extends State<Header> {
         HeaderButtonItem(buttonSide: ButtonSide.both, icon: Icons.play_arrow_rounded, text: "run".tr, func: () => controller.run(context),),
         Expanded(child: Container()),
         HeaderButtonItem(buttonSide: ButtonSide.left, icon: Icons.tune, text: "encoder".tr, func: ()=>encoderDialog(context)),
+        HeaderButtonItem(buttonSide: ButtonSide.mid, icon: Icons.delete_rounded, text: "clear".tr, func: clear),
         HeaderButtonItem(buttonSide: ButtonSide.mid, icon: FontAwesomeIcons.globe, text: "language".tr, func: ()=>selectLanguage(context), iconSize: 16,),
         HeaderButtonItem(buttonSide: ButtonSide.right, icon: Icons.info_rounded, text: "about".tr, func: ()=>showAbout(context),),
       ],
