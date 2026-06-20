@@ -12,7 +12,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   Controller controller=Get.put(Controller());
-  await controller.initLang();
+  await controller.init();
   WindowOptions windowOptions = WindowOptions(
     size: Size(700, 600),
     minimumSize: Size(700, 600),

@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
@@ -22,6 +25,8 @@ List<LanguageType> get supportedLocales => [
   LanguageType("简体中文", const Locale("zh", "CN")),
   LanguageType("繁體中文", const Locale("zh", "TW")),
 ];
+
+typedef Converter=Pointer<Utf8> Function(Pointer<Utf8>);
 
 class Controller extends GetxController {
 
@@ -51,7 +56,7 @@ class Controller extends GetxController {
   RxList<String> videos=RxList([]);
   RxList<String> subs=RxList([]);
 
-  Future<void> initLang() async {
+  Future<void> init() async {
     prefs=await SharedPreferences.getInstance();
 
     int? langIndex=prefs.getInt("langIndex");
@@ -69,6 +74,13 @@ class Controller extends GetxController {
     }
 
     outputInput.text=prefs.getString('output')??"";
+
+  }
+
+  static String convertHandler(Pointer<Utf8> dir){
+    final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'libconverter.dylib' : 'libconverter.dll');
+    Converter convert=dynamicLib.lookupFunction<Converter, Converter>("Convert");
+    return convert(dir).toDartString();
   }
 
   void changeLanguage(int index){
@@ -115,6 +127,14 @@ class Controller extends GetxController {
       await showErrorDialog(context, 'error'.tr, 'videoAndOutputSame'.tr);
       return;
     }
+
+    String handle=await compute(convertHandler, subPath.value.toNativeUtf8());
+
+    if(handle.isNotEmpty){
+      await showErrorDialog(context, 'error'.tr, handle);
+      return;
+    }
+
     late Shell shell;
     late ShellLinesController controller;
 
@@ -123,6 +143,7 @@ class Controller extends GetxController {
     length.value=videos.length;
 
     showDialog(
+      barrierDismissible: false, 
       context: context, 
       builder: (BuildContext context) => AlertDialog(
         title: Row(
@@ -181,7 +202,7 @@ class Controller extends GetxController {
       }
       var command = '';
       command = '''
-${p.join(p.dirname(Platform.resolvedExecutable), Platform.isWindows ? "ffmpeg.exe" : "ffmpeg")} -i "${video}" -vf "ass='${p.basename(sub)}'" ${sizeCmd(useSize.value, int.tryParse(widthInput.text) ?? 1920, int.tryParse(heightInput.text) ?? 1080)}${encoderCmd(videoEncoder.value, audioEncoder.value)} "${savePath.replaceAll("\\", "/")}"
+${p.join(p.dirname(Platform.resolvedExecutable), Platform.isWindows ? "ffmpeg.exe" : "ffmpeg")} -y -i "${video}" -vf "ass='${p.basename(sub)}'" ${sizeCmd(useSize.value, int.tryParse(widthInput.text) ?? 1920, int.tryParse(heightInput.text) ?? 1080)}${encoderCmd(videoEncoder.value, audioEncoder.value)} "${savePath.replaceAll("\\", "/")}"
 ''';
       controller=ShellLinesController(encoding: utf8);
       shell=Shell(workingDirectory: subPath.value, stdout: controller.sink, stderr: controller.sink);
