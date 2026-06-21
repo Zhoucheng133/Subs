@@ -33,28 +33,29 @@ You need to download the corresponding FFmpeg binary for your system, e.g. `FFmp
 Note your system architecture — the `macos` folder already includes a version of FFmpeg built for Apple Silicon (macOS ARM). You can replace it if needed.
 
 ### Dynamic Library
+
 You need to have Go installed on your device and build the `libconverter` dynamic library.
 Run the following command inside the `converter` directory to build the library:
 
-​```bash
+```bash
 # For Windows
 go build -buildmode=c-shared -ldflags="-s -w" -o build/libconverter.dll
 # For macOS
 go build -buildmode=c-shared -ldflags="-s -w" -o build/libconverter.dylib
-​```
+```
 
 The dynamic library will be built in the `converter/build` directory.
 You need to copy `libconverter.dll` or `libconverter.dylib` into the `windows` or `macos` folder respectively.
 
 For Windows:
-​```
+```
 libconverter.dll -> windows/libconverter.dll
-​```
+```
 
 For macOS:
-​```
+```
 libconverter.dylib -> macos/libconverter.dylib
-​```
+```
 
 Pre-built dynamic library files are already included in the respective directories (the macOS version is built for Apple Silicon ARM). You may choose to use the pre-built libraries or replace them with your own.
 
@@ -62,11 +63,11 @@ Pre-built dynamic library files are already included in the respective directori
 You need to have Flutter installed on your device. This project was developed with Flutter 3.41; newer versions should also work.
 Use the following commands to build the complete app:
 
-​```bash
+```bash
 # For Windows
 flutter build windows
 # For macOS
 flutter build macOS
-​```
+```
 
 The build output can be found in `build/windows/build/Products/Release` or `build/macos/build/Products/Release`.
